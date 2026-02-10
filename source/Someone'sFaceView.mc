@@ -33,6 +33,10 @@ class Someone_sFaceView extends WatchUi.WatchFace {
         var mins = clockTime.min;        
         var settings = System.getDeviceSettings();
 
+        if (!Application.Properties.getValue("TimeColon")) {
+            timeFormat = "$1$$2$";
+        }
+
         if (!settings.is24Hour) {
             if (hours > 12) {
                 hours = hours - 12;
