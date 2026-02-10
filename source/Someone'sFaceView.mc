@@ -36,10 +36,11 @@ class Someone_sFaceView extends WatchUi.WatchFace {
         if (!settings.is24Hour) {
             if (hours > 12) {
                 hours = hours - 12;
+            } else if (hours == 0) {
+                hours = 12;
             }
         } else {
             if (Application.Properties.getValue("UseMilitaryFormat")) {
-                timeFormat = "$1$$2$";
                 hours = hours.format("%02d");
             }
         }
@@ -50,35 +51,66 @@ class Someone_sFaceView extends WatchUi.WatchFace {
         var secs = clockTime.sec;
         var offset = clockTime.timeZoneOffset;
 
-        var utcSecs = (hours * 3600) + (mins * 60) + secs - offset;
+        var utcSecs = (clockTime.hour * 3600) + (mins * 60) + secs - offset;
+
+        // Get and format Weekday and Date
+
+        var now = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
+        var dateString = Lang.format("$1$ $2$", [
+            now.day_of_week.toUpper(),
+            now.day
+        ]);
+
+        // Get Heart Rate Info
+        var hrData = Toybox.ActivityMonitor.getHeartRateHistory(1,true).next().heartRate;
+
+        // Get Sun Status (Sunrise or Sundown, whichever is next)
+
 
         // ---------- Update the Watch Face ----------
 
         // Update the time
         var time = View.findDrawableById("TimeLabel") as Text;
-        time.setColor(Application.Properties.getValue("ForegroundColor") as Number);
+        //time.setColor(Application.Properties.getValue("TimeColor") as Number);
         time.setText(timeString);
 
         //Update the Seconds
         var seconds = View.findDrawableById("seconds") as Text;
-        seconds.setColor(Application.Properties.getValue("ForegroundColor") as Number);
+        //seconds.setColor(Application.Properties.getValue("TimeColor") as Number);
         seconds.setText(secs.format("%02d"));
 
         // Update UTC
         var utcText = View.findDrawableById("utc") as Text;
+        //time.setColor(Application.Properties.getValue("??????") as Number);
         utcText.setText((utcSecs/3600 % 24).format("%02d"));
 
         // Update Day of Week and Day
-        var text1Label = View.findDrawableById("text1") as Text;
-        text1Label.setText("Hello World!");
+        var text1Label = View.findDrawableById("dateString") as Text;
+        //text1Label.setColor(Application.Properties.getValue("ForegroundColor") as Number);
+        text1Label.setText(dateString);
+
+        // Update Heart Rate Data
+        var hr = View.findDrawableById("heartRate") as Text;
+        //hr.setColor(Application.Properties.getValue("TimeColor") as Number);
+        if (hrData == null or hrData == ActivityMonitor.INVALID_HR_SAMPLE){
+            hr.setText("--");
+        }else{
+            hr.setText(hrData.format("%d"));
+        }
+        
+        // Update Sun Status
+        var sun = View.findDrawableById("sun") as Text;
+        //sun.setColor(Application.Properties.getValue("ForegroundColor") as Number);
+        sun.setText(timeString);
 
         // ---------- Update Non-Regular Information ----------
 
         // Print +30 Min timezone notice
         offset %= 3600;
-        if (offset != 0) {
+        if (offset != 0) { // (true)
             var utcNewfoundland = View.findDrawableById("newfoundland") as Text;
             utcNewfoundland.setText((offset/60).format("%02d"));
+            //utcNewfoundland.setText("-30");
         }
 
         // ---------- Send the Updates ----------
@@ -87,7 +119,7 @@ class Someone_sFaceView extends WatchUi.WatchFace {
         View.onUpdate(dc);
 
         // ---------- Dev Tools ----------
-        drawReferenceLines(dc);
+        //drawReferenceLines(dc);
     }
 
     // Called when this View is removed from the screen. Save the
