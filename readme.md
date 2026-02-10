@@ -19,3 +19,48 @@
   - Download the the current version of the SDK, and the device.
 
 
+## Dev List
+
+- [x] Set up Face
+  - [x] Add Time
+  - [x] Add Seconds
+  - [x] Add Leading 0 Support
+  - [x] Add Remove Colon Support
+  - [x] Manage Colors through settings, use manually set for now
+- [ ] Add Fields
+  - [x] Heart Rate
+  - [ ] Sunrise and Sundown in same field
+  - [ ] Current Weather
+  - [x] Weekday and Date
+  - [x] UTC Time
+    - [x] Icon on UTC Time to account for time zones outside of 1hr jumps
+  - [ ] Body Battery
+  - [ ] Recovery Time?
+  - [ ] Current Stress Level?
+  - [ ] Total Number of Notifications
+  - [ ] Sleep Score --> Sleep Need
+  - [ ] Last Activity?
+- [ ] Add Progress Bars
+  - [ ] Sunrise, Sundown, and Sun is not up
+  - [ ] Intensity Minutes Progress
+  - [ ] Battery Life
+  - [ ] Custom Bar #4?
+- [ ] Add Icons for Status
+  - [ ] Bluetooth Disconnected
+  - [ ] Alarm is Set
+  - [ ] Do Not Disturb is On
+- [ ] Add Icons for the Custom Fields
+  - [ ] Heart Rate
+  - [ ] Sun
+  - [ ] Weather
+  - [ ] Body Battery
+  - [ ] Recovery Time?
+  - [ ] Notifications Icon
+- [ ] Add Face Flairs
+  - [ ] Color Highlight under Centre box
+  - [ ] Lines to split all sections
+  - [ ] Custom Font for Current Time
+  - [ ] Add end caps to progress bars
+- [ ] Face Interactions
+  - [ ] Configure Long-Press Interactions
+  - [ ] Configure tap interaction(s)?
