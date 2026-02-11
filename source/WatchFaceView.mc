@@ -264,11 +264,20 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         // charged portion
         dc.setColor(colorBatteryCharged, colorTransparent);
-        dc.fillCircle(WIDTH*0.5 + WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.745, ARC_WIDTH);
+
+        dc.fillCircle(
+            WIDTH * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+            HEIGHT * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+            ARC_WIDTH
+        );
 
         // discharged portion
         dc.setColor(colorBatteryDischarged, colorTransparent);
-        dc.fillCircle(WIDTH*0.5 + WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.255, ARC_WIDTH);
+        dc.fillCircle(
+            WIDTH * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+            HEIGHT * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+            ARC_WIDTH
+        );
         
         // ----- Sunrise Sundown Bar -----
         var colorSunPast = Graphics.COLOR_DK_BLUE;
@@ -278,8 +287,16 @@ class WatchFaceView extends WatchUi.WatchFace {
         if (nextSun[0] == null or !nextSun[0]){
             dc.setColor(colorSunDown, colorTransparent);
             dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.495 - ARC_WIDTH/2, Graphics.ARC_CLOCKWISE, 90 + ARC_LENGTH/2, 90-ARC_LENGTH / 2);
-            dc.fillCircle(WIDTH * 0.255, HEIGHT*0.5 - HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
-            dc.fillCircle(WIDTH * 0.745, HEIGHT*0.5 - HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
+            dc.fillCircle(
+                WIDTH * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+                HEIGHT * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+                ARC_WIDTH
+            );
+            dc.fillCircle(
+                WIDTH * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+                HEIGHT * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+                ARC_WIDTH
+            );
         } else {
             var percentDaylight = now.subtract(todaySunRise).value()*1.0 / todaySunSet.subtract(todaySunRise).value();
             
@@ -292,9 +309,17 @@ class WatchFaceView extends WatchUi.WatchFace {
             dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.495 - ARC_WIDTH/2, Graphics.ARC_CLOCKWISE, 90 + ARC_LENGTH/2, 90 + ARC_LENGTH / 2 - ARC_LENGTH*percentDaylight);
 
             // Circle Caps
-            dc.fillCircle(WIDTH * 0.255, HEIGHT*0.5 - HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
+            dc.fillCircle(
+                WIDTH * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+                HEIGHT * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+                ARC_WIDTH
+            );
             dc.setColor(colorSunRemaining, colorTransparent);
-            dc.fillCircle(WIDTH * 0.745, HEIGHT*0.5 - HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
+            dc.fillCircle(
+                WIDTH * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+                HEIGHT * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+                ARC_WIDTH
+            );
         }
 
         // ----- Active Hours Bar -----
@@ -316,14 +341,22 @@ class WatchFaceView extends WatchUi.WatchFace {
         if (intensityStatus == 0 or intensityStatus == null){
             dc.setColor(colorActiveGoal, colorTransparent);
         }
-        dc.fillCircle(WIDTH * 0.255, HEIGHT*0.5 + HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
-
+        dc.fillCircle(
+            WIDTH * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+            HEIGHT * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+            ARC_WIDTH
+        );
+        
         dc.setColor(colorActiveGoal, colorTransparent);
         
         if (intensityGoalProgress == 1){
             dc.setColor(colorActiveCompleted, colorTransparent);
         }
-        dc.fillCircle(WIDTH * 0.745, HEIGHT*0.5 + HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
+        dc.fillCircle(
+            WIDTH * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+            HEIGHT * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+            ARC_WIDTH
+        );
 
         // ----- Progress Bar 4 ----- NEED TO ALLOCATE -----
         var colorBar4On = Graphics.COLOR_GREEN;
@@ -337,24 +370,63 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         // charged portion
         dc.setColor(colorBar4On, colorTransparent);
-        dc.fillCircle(WIDTH*0.5 - WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.745, ARC_WIDTH);
+        dc.fillCircle(
+            WIDTH * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+            HEIGHT * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+            ARC_WIDTH
+        );
 
         // discharged portion
         dc.setColor(colorBar4Off, colorTransparent);
-        dc.fillCircle(WIDTH*0.5 - WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.255, ARC_WIDTH);
-
+        dc.fillCircle(
+            WIDTH * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+            HEIGHT * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+            ARC_WIDTH
+        );
 
         // ----- all border rings -----
         dc.setColor(Application.Properties.getValue("BackgroundColor"), colorTransparent);
         dc.setPenWidth((ARC_WIDTH)/2);
-        dc.drawCircle(WIDTH*0.5 + WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.745, ARC_WIDTH);
-        dc.drawCircle(WIDTH*0.5 + WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.255, ARC_WIDTH);
-        dc.drawCircle(WIDTH*0.5 - WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.745, ARC_WIDTH);
-        dc.drawCircle(WIDTH*0.5 - WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.255, ARC_WIDTH);
-        dc.drawCircle(WIDTH * 0.255, HEIGHT*0.5 - HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
-        dc.drawCircle(WIDTH * 0.745, HEIGHT*0.5 - HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
-        dc.drawCircle(WIDTH * 0.255, HEIGHT*0.5 + HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
-        dc.drawCircle(WIDTH * 0.745, HEIGHT*0.5 + HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
+        dc.drawCircle(
+            WIDTH * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+            HEIGHT * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+            ARC_WIDTH
+        );
+        dc.drawCircle(
+            WIDTH * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+            HEIGHT * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+            ARC_WIDTH
+        );
+        dc.drawCircle(
+            WIDTH * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+            HEIGHT * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+            ARC_WIDTH
+        );
+        dc.drawCircle(
+            WIDTH * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+            HEIGHT * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+            ARC_WIDTH
+        );
+        dc.drawCircle(
+            WIDTH * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+            HEIGHT * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+            ARC_WIDTH
+        );
+        dc.drawCircle(
+            WIDTH * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+            HEIGHT * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+            ARC_WIDTH
+        );
+        dc.drawCircle(
+            WIDTH * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+            HEIGHT * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+            ARC_WIDTH
+        );
+        dc.drawCircle(
+            WIDTH * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH/2.0 - ARC_WIDTH),
+            HEIGHT * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT/2.0 - ARC_WIDTH),
+            ARC_WIDTH
+        );
                 
         // ---------- Dev Tools ----------
         // drawReferenceLines(dc);

@@ -74,7 +74,7 @@
   - [ ] Color Highlight under Centre box
   - [ ] Lines to split all sections
   - [ ] Custom Font for Current Time
-  - [ ] Add end caps to progress bars
+  - [x] Add end caps to progress bars
 - [ ] Face Interactions
   - [ ] Configure Long-Press Interactions
   - [ ] Configure tap interactions
