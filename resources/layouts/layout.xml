@@ -2,11 +2,16 @@
     <drawable class="Background" />
     <label id="TimeLabel" x="center" y="center" font="Graphics.FONT_SYSTEM_NUMBER_HOT" justification="Graphics.TEXT_JUSTIFY_CENTER" color="Graphics.COLOR_BLUE" />
     <label id="dateString" x="center" y="5%" font="Graphics.FONT_MEDIUM" justification="Graphics.TEXT_JUSTIFY_CENTER" color="Graphics.COLOR_PURPLE"/>
-    <label id="seconds" x="85%" y="50%" font="Graphics.FONT_SMALL" justification="Graphics.TEXT_JUSTIFY_LEFT" color="Graphics.COLOR_RED"/>
-    <label id="utc" x="15%" y="40%" font="Graphics.FONT_TINY" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_PINK"/>
-    <label id="newfoundland" x="15%" y="50%" font="Graphics.FONT_TINY" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_GREEN"/>
+    <label id="seconds" x="86%" y="50%" font="Graphics.FONT_SMALL" justification="Graphics.TEXT_JUSTIFY_LEFT" color="Graphics.COLOR_RED"/>
+    <label id="utc" x="14%" y="40%" font="Graphics.FONT_TINY" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_PINK"/>
+    <label id="newfoundland" x="14%" y="50%" font="Graphics.FONT_TINY" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_GREEN"/>
 
-    <!-- Sensors -->
-    <label id="heartRate" x="30%" y="20%" font="Graphics.FONT_MEDIUM" justification="Graphics.TEXT_JUSTIFY_CENTER" color="Graphics.COLOR_PINK"/>
+    <!-- Weather -->
+    <label id="weather" x="30%" y="20%" font="Graphics.FONT_MEDIUM" justification="Graphics.TEXT_JUSTIFY_CENTER" color="Graphics.COLOR_PINK"/>
     <label id="sun" x="70%" y="20%" font="Graphics.FONT_MEDIUM" justification="Graphics.TEXT_JUSTIFY_CENTER" color="Graphics.COLOR_PINK"/>
+
+    <!-- Sensor -->
+    <label id="heartRate" x="30%" y="68%" font="Graphics.FONT_MEDIUM" justification="Graphics.TEXT_JUSTIFY_CENTER" color="Graphics.COLOR_PINK"/>
+    <label id="bodyBattery" x="70%" y="68%" font="Graphics.FONT_MEDIUM" justification="Graphics.TEXT_JUSTIFY_CENTER" color="Graphics.COLOR_PINK"/>
+
 </layout>

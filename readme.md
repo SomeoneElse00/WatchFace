@@ -29,12 +29,12 @@
   - [x] Manage Colors through settings, use manually set for now
 - [ ] Add Fields
   - [x] Heart Rate
-  - [ ] Sunrise and Sundown in same field
-  - [ ] Current Weather
+  - [x] Sunrise and Sundown in same field
+  - [x] Current Weather
   - [x] Weekday and Date
   - [x] UTC Time
     - [x] Icon on UTC Time to account for time zones outside of 1hr jumps
-  - [ ] Body Battery
+  - [x] Body Battery
   - [ ] Recovery Time?
   - [ ] Current Stress Level?
   - [ ] Total Number of Notifications
@@ -63,4 +63,5 @@
   - [ ] Add end caps to progress bars
 - [ ] Face Interactions
   - [ ] Configure Long-Press Interactions
-  - [ ] Configure tap interaction(s)?
+  - [ ] Configure tap interactions
+    - [ ] Tap weathr to toggle to feels like

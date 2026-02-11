@@ -6,6 +6,7 @@ import Toybox.WatchUi;
 import Toybox.Time;
 import Toybox.Weather;
 import Toybox.Position;
+import Toybox.SensorHistory;
 
 class Someone_sFaceView extends WatchUi.WatchFace {
     function initialize() {
@@ -29,14 +30,13 @@ class Someone_sFaceView extends WatchUi.WatchFace {
         // ---------- Update Variables ----------
 
         // General Variables
-        var location = Position.getInfo();
-        //var settings = System.getDeviceSettings();
+        var currentLocation = Position.getInfo();
+        var systemSettings = System.getDeviceSettings();
         var now = Time.now();
 
         // Get the current time and format it correctly
-
-        var clockTime = System.getClockTime();
-        var timeString = convertTime(clockTime.hour, clockTime.min);
+        var currentTime = System.getClockTime();
+        var timeString = convertTime(currentTime.hour, currentTime.min);
 
         /*
         var timeFormat = "$1$:$2$";
@@ -63,10 +63,10 @@ class Someone_sFaceView extends WatchUi.WatchFace {
         */
 
         // Get UTC information
-        var secs = clockTime.sec;
-        var offset = clockTime.timeZoneOffset;
+        var secs = currentTime.sec;
+        var offset = currentTime.timeZoneOffset;
 
-        var utcSecs = (clockTime.hour * 3600) + (clockTime.min * 60) + secs - offset;
+        var utcSecs = (currentTime.hour * 3600) + (currentTime.min * 60) + secs - offset;
 
         // Get and format Weekday and Date
         var dayInfo = Gregorian.info(now, Time.FORMAT_MEDIUM);
@@ -79,100 +79,141 @@ class Someone_sFaceView extends WatchUi.WatchFace {
         var hrData = Toybox.ActivityMonitor.getHeartRateHistory(1,true).next().heartRate;
 
         // Get Sun Status (Sunrise or Sundown, whichever is next)
-        var sunRise = Weather.getSunrise(location.position, now);
-        var sunSet = Weather.getSunset(location.position, now);
-        var sun = [null as Boolean, null as Integer, null as Integer]; // Var 1 is the next sun event (False for rise, True for set, null for not available), Var 2 is the time in seconds that the sun event occurs at.
+        var todaySunRise = Weather.getSunrise(currentLocation.position, now);
+        var todaySunSet = Weather.getSunset(currentLocation.position, now);
+        var nextSun = [null as Boolean, null as Integer, null as Integer]; // Var 1 is the next sun event (False for rise, True for set, null for not available), Var 2 is the time in seconds that the sun event occurs at.
         var nextSunEvent = null;
-        /* 
-        var sunRise = null;
-        var sunSet = null;
 
-        if (location.accuracy >= Position.QUALITY_LAST_KNOWN){
-            sunRise = Weather.getSunrise(location.position, now);
-            sunSet = Weather.getSunset(location.position, now);
-        } */
-        if (sunRise != null && sunSet != null) {
-            if (now.value() > sunRise.value()) {
-                if (now.value() > sunSet.value()){
+        if (todaySunRise != null && todaySunSet != null) {
+            if (now.value() > todaySunRise.value()) {
+                if (now.value() > todaySunSet.value()){
                     var oneDay = new Time.Duration(Gregorian.SECONDS_PER_DAY);
                     var tomorrow = now.add(oneDay);
-                    nextSunEvent = Weather.getSunrise(location.position, tomorrow);
-                    sun[0] = false;
+                    nextSunEvent = Weather.getSunrise(currentLocation.position, tomorrow);
+                    nextSun[0] = false;
                 }else{
-                    nextSunEvent = sunSet;
-                    sun[0] = true;
+                    nextSunEvent = todaySunSet;
+                    nextSun[0] = true;
                 }
             }else{
-                nextSunEvent = sunRise;
-                sun[0] = false;
+                nextSunEvent = todaySunRise;
+                nextSun[0] = false;
             }
-            if(sun[0] != null && nextSunEvent instanceof Moment){
-                nextSunEvent = Gregorian.localMoment(location.position, nextSunEvent);
+            if(nextSun[0] != null && nextSunEvent instanceof Moment){
+                nextSunEvent = Gregorian.localMoment(currentLocation.position, nextSunEvent);
                 if (nextSunEvent != null){
                     nextSunEvent = Gregorian.info(nextSunEvent, Time.FORMAT_SHORT);
-                    sun[1] = nextSunEvent.hour;
-                    sun[2] = nextSunEvent.min;
+                    nextSun[1] = nextSunEvent.hour;
+                    nextSun[2] = nextSunEvent.min;
                 }
                 
             }
         }
 
+        // Get Current Weather
+        var currentWeather = Weather.getCurrentConditions();
+        var currentTemperature = null;
+        if (currentWeather != null){
+            currentTemperature = currentWeather.temperature;
+        }
+
+        // Get Body Battery
+        var currentBodyBattery = null;
+        if ((Toybox has :SensorHistory) && (Toybox.SensorHistory has :getBodyBatteryHistory)){
+            var bodyBatteryOptions = {
+                :period => 1,
+                :order => SensorHistory.ORDER_NEWEST_FIRST
+            };
+            //currentBodyBattery = Toybox.SensorHistory.getBodyBatteryHistory(bodyBatteryOptions);//({});
+            var bodyBatteryIterator = Toybox.SensorHistory.getBodyBatteryHistory(bodyBatteryOptions);
+            currentBodyBattery = bodyBatteryIterator.next();
+            if (currentBodyBattery != null){
+                var tenSecs = new Time.Duration(10);
+                if (tenSecs.lessThan(now.subtract(currentBodyBattery.when))){
+                    currentBodyBattery = null;
+                }
+            }
+        }
 
         // ---------- Update the Watch Face ----------
 
         // Update the time
-        var time = View.findDrawableById("TimeLabel") as Text;
+        var fieldTime = View.findDrawableById("TimeLabel") as Text;
         //time.setColor(Application.Properties.getValue("TimeColor") as Number);
-        time.setText(timeString);
+        fieldTime.setText(timeString);
+        if(!systemSettings.is24Hour or !Application.Properties.getValue("TimeColon")){
+            fieldTime.locX = dc.getWidth() * 0.825;
+            fieldTime.setJustification(Graphics.TEXT_JUSTIFY_RIGHT);
+        }
 
         //Update the Seconds
-        var seconds = View.findDrawableById("seconds") as Text;
+        var fieldSecondsDigit = View.findDrawableById("seconds") as Text;
         //seconds.setColor(Application.Properties.getValue("TimeColor") as Number);
-        seconds.setText(secs.format("%02d"));
-
-        // Update UTC
-        var utcText = View.findDrawableById("utc") as Text;
-        //time.setColor(Application.Properties.getValue("??????") as Number);
-        utcText.setText((utcSecs/3600 % 24).format("%02d"));
+        fieldSecondsDigit.setText(secs.format("%02d"));
 
         // Update Day of Week and Day
-        var text1Label = View.findDrawableById("dateString") as Text;
+        var fieldDateString = View.findDrawableById("dateString") as Text;
         //text1Label.setColor(Application.Properties.getValue("ForegroundColor") as Number);
-        text1Label.setText(dateString);
+        fieldDateString.setText(dateString);
 
         // Update Heart Rate Data
-        var hr = View.findDrawableById("heartRate") as Text;
+        var fieldHR = View.findDrawableById("heartRate") as Text;
         //hr.setColor(Application.Properties.getValue("TimeColor") as Number);
         if (hrData == null or hrData == ActivityMonitor.INVALID_HR_SAMPLE){
-            hr.setText("--");
+            fieldHR.setText("--");
         }else{
-            hr.setText(hrData.format("%d"));
+            fieldHR.setText(hrData.format("%d"));
         }
         
         // Update Sun Status
-        var sunData = View.findDrawableById("sun") as Text;
+        var fieldSunData = View.findDrawableById("sun") as Text;
         //sun.setColor(Application.Properties.getValue("ForegroundColor") as Number);
-        if (sun[0] != null){
-            sunData.setText(convertTime(sun[1], sun[2]));
-                
-                //Lang.format("$1$:$2$", [sun[1].hour, sun[1].minute]));
+        if (nextSun[0] != null){
+            fieldSunData.setText(convertTime(nextSun[1], nextSun[2]));
+            //Lang.format("$1$:$2$", [sun[1].hour, sun[1].minute]));
         }else{
             if (Application.Properties.getValue("TimeColon")){
-                sunData.setText("--:--");
+                fieldSunData.setText("--:--");
             }else{
-                sunData.setText("----");
+                fieldSunData.setText("----");
             }
+        }
+
+        // Update Temperature
+        var fieldTempData = View.findDrawableById("weather") as Text;
+        if (currentTemperature != null){
+            fieldTempData.setText(currentTemperature.format("%d"));
+        }
+
+        // Update Body Battery
+        var bodyBateryField = View.findDrawableById("bodyBattery") as Text;
+
+        if (currentBodyBattery != null){
+            bodyBateryField.setText(currentBodyBattery.data.format("%d"));
+        }else{
+            bodyBateryField.setText("");
         }
         
 
-        // ---------- Update Non-Regular Information ----------
+        // ---------- Update UTC Information ----------
+        
+        // Check the setting
+        var utcText = View.findDrawableById("utc") as Text;
+        if (Application.Properties.getValue("ShowUTC")){
 
-        // Print +30 Min timezone notice
-        offset %= 3600;
-        if (offset != 0) { // (true)
-            var utcNewfoundland = View.findDrawableById("newfoundland") as Text;
-            utcNewfoundland.setText((offset/60).format("%02d"));
-            //utcNewfoundland.setText("-30");
+            // Update UTC
+            // time.setColor(Application.Properties.getValue("??????") as Number);
+            utcText.setText((utcSecs/3600 % 24).format("%02d"));
+
+            // Print +30 Min timezone notice
+            offset %= 3600;
+            if (offset != 0) { // (true)
+                var utcNewfoundland = View.findDrawableById("newfoundland") as Text;
+                utcNewfoundland.setText((offset/60).format("%02d"));
+                //utcNewfoundland.setText("-30");
+            }
+        }else{
+            utcText.setText("");
         }
 
         // ---------- Send the Updates ----------
@@ -181,7 +222,7 @@ class Someone_sFaceView extends WatchUi.WatchFace {
         View.onUpdate(dc);
 
         // ---------- Dev Tools ----------
-        //drawReferenceLines(dc);
+        drawReferenceLines(dc);
     }
 
     // Called when this View is removed from the screen. Save the

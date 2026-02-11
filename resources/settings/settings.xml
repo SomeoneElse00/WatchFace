@@ -35,4 +35,8 @@
         <settingConfig type="boolean" />
     </setting>
 
+    <setting propertyKey="@Properties.ShowUTC" title="@Strings.ShowUTCTitle">
+        <settingConfig type="boolean" />
+    </setting>
+
 </settings>
