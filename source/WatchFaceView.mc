@@ -237,7 +237,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         // ---------- Draw Progress Bars ----------
         var WIDTH = dc.getWidth();
         var HEIGHT = dc.getHeight();
-        var ARC_WIDTH = 8;
+        var ARC_WIDTH = HEIGHT/55;//scaling goal is for a 454 pixel display to have a width of approximateley 8.
         var ARC_LENGTH = 70;
         var colorTransparent = Graphics.COLOR_TRANSPARENT;
         dc.setPenWidth(ARC_WIDTH);
