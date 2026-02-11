@@ -43,7 +43,8 @@
 - [ ] Add Progress Bars
   - [ ] Sunrise, Sundown, and Sun is not up
   - [ ] Intensity Minutes Progress
-  - [ ] Battery Life
+  - [x] Battery Life
+    - [ ] switch battery life bar to other side (right)
   - [ ] Custom Bar #4?
 - [ ] Add Icons for Status
   - [ ] Bluetooth Disconnected
@@ -65,3 +66,9 @@
   - [ ] Configure Long-Press Interactions
   - [ ] Configure tap interactions
     - [ ] Tap weathr to toggle to feels like
+
+## References
+
+I used and referenced code from this [medium article by Eric](https://medium.com/@ericbt/design-your-own-garmin-watch-face-21d004d38f99) as a starting and jumping-off point. The final product of his work is available on [GitHub](https://github.com/briquet9/garmin-watch-faces/tree/main) under an [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0.txt).  
+
+Generative AI was used in this project to assist with debugging and researching solutions. All code included in this project that was written by me is not a direct output of a Generative AI model, nor does it include minor tweaks (i.e. changing variable names) to not be contradictory to the previous claim.  

@@ -135,6 +135,10 @@ class Someone_sFaceView extends WatchUi.WatchFace {
             }
         }
 
+        //Get Watch Battery
+        var batteryStatus = System.getSystemStats().battery;
+        var batteryDays = System.getSystemStats().batteryInDays;
+
         // ---------- Update the Watch Face ----------
 
         // Update the time
@@ -221,8 +225,53 @@ class Someone_sFaceView extends WatchUi.WatchFace {
         // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
 
+        // ---------- Draw Progress Bars ----------
+        var WIDTH = dc.getWidth();
+        var HEIGHT = dc.getHeight();
+        var ARC_WIDTH = 6;
+        var ARC_LENGTH = 60;
+        dc.setPenWidth(ARC_WIDTH);
+
+        // Battery Progress Bar
+        var colorBatteryCharged = Graphics.COLOR_GREEN;
+        var colorBatteryDischarged = Graphics.COLOR_DK_GRAY;
+        var colorBatteryBackground = Application.Properties.getValue("BackgroundColor");
+        var colorTransparent = Graphics.COLOR_TRANSPARENT;
+
+        dc.setColor(colorBatteryDischarged, colorTransparent);
+        dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.495 - ARC_WIDTH/2, Graphics.ARC_CLOCKWISE, 180 + ARC_LENGTH/2, 180 - ARC_LENGTH / 2);
+        if (System.getSystemStats().charging) {
+            colorBatteryCharged = Graphics.COLOR_BLUE;
+            colorBatteryDischarged = colorBatteryCharged;
+        } else if(batteryDays < 3){
+            colorBatteryCharged = Graphics.COLOR_RED;
+            colorBatteryDischarged = colorBatteryCharged;
+        }else if (batteryDays <= 5){
+            colorBatteryCharged = Graphics.COLOR_YELLOW;
+        }else if (batteryDays > 10){
+            colorBatteryDischarged = colorBatteryCharged;
+        }
+        dc.setColor(colorBatteryCharged, colorTransparent);
+        dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.495 - ARC_WIDTH / 2, Graphics.ARC_CLOCKWISE,  180 + ARC_LENGTH / 2 , 180 + ARC_LENGTH / 2 - ARC_LENGTH * batteryStatus/100);
+
+        // charged portion
+        dc.setColor(colorBatteryCharged, colorTransparent);
+        dc.fillCircle(WIDTH*0.5 - WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.745, ARC_WIDTH);
+
+        // discharged portion
+        dc.setColor(colorBatteryDischarged, colorTransparent);
+        dc.fillCircle(WIDTH*0.5 - WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.255, ARC_WIDTH);
+
+        // border rings
+        dc.setColor(colorBatteryBackground, colorTransparent);
+        dc.setPenWidth((ARC_WIDTH)/2);
+        dc.drawCircle(WIDTH*0.5 - WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.745, ARC_WIDTH);
+        dc.drawCircle(WIDTH*0.5 - WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.255, ARC_WIDTH);
+
+        // discharged portion
+        
         // ---------- Dev Tools ----------
-        drawReferenceLines(dc);
+        // drawReferenceLines(dc);
     }
 
     // Called when this View is removed from the screen. Save the
