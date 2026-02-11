@@ -8,7 +8,7 @@ import Toybox.Weather;
 import Toybox.Position;
 import Toybox.SensorHistory;
 
-class Someone_sFaceView extends WatchUi.WatchFace {
+class WatchFaceView extends WatchUi.WatchFace {
     function initialize() {
         WatchFace.initialize();
     }

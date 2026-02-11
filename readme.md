@@ -5,7 +5,7 @@
 ## Dependencies
 
 - Garmin Connect IQ 8.4.0 or later
-- API level 5.2 Device (Garmin Venu 3)
+- API level 5.2 Device or later (Garmin Venu 3)
 - Java JRE 1.8.0 or later
 
 ## Setup Steps
@@ -73,4 +73,4 @@
 
 I used and referenced code from this [medium article by Eric](https://medium.com/@ericbt/design-your-own-garmin-watch-face-21d004d38f99) as a starting and jumping-off point. The final product of his work is available on [GitHub](https://github.com/briquet9/garmin-watch-faces/tree/main) under an [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0.txt).  
 
-Generative AI was used in this project to assist with debugging and researching solutions. All code included in this project that was written by me is not a direct output of a Generative AI model, nor does it include minor tweaks (i.e. changing variable names) to not be contradictory to the previous claim.  
+Generative AI was used in this project to assist with debugging and researching through the API and web for my approach for completing a given task. All code included in this project that was written by me is not a direct output of a Generative AI model, nor does it include minor tweaks (i.e. changing variable names) to not be contradictory to the previous claim. All ideas on the watch face's design are my own.  
