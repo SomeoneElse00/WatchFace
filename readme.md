@@ -8,16 +8,25 @@
 - API level 5.2 Device or later (Garmin Venu 3)
 - Java JRE 1.8.0 or later
 
-## Setup Steps
+## Compiling
 
 - Install Java JRE from [Oracle](https://www.java.com/en/download/) (for compiling).
+- Install [VSCode](https://code.visualstudio.com) or [VSCodium](https://vscodium.com) as your IDE.
 - Install Garmin's `Monkey C` extension.
-  - If you want to use vscodium, go to [this website](https://marketplace.visualstudio.com/_apis/public/gallery/publishers/Garmin/vsextensions/garmin.monkey-c/1.1.2/vspackage?targetPlatform=win32-x64). Modify the URL to increment the version number as required. Current version can be checked [here](https://marketplace.visualstudio.com/items?itemName=garmin.monkey-c).  
+  - If you are using vscodium, go to [this website](https://marketplace.visualstudio.com/_apis/public/gallery/publishers/Garmin/vsextensions/garmin.monkey-c/1.1.2/vspackage?targetPlatform=win32-x64). Modify the URL to increment the version number as required. The current version number can be checked [here](https://marketplace.visualstudio.com/items?itemName=garmin.monkey-c).  
 - Grab the current SDK from [Garmin's website](https://developer.garmin.com/connect-iq/sdk/).  
   - Once you download the SDK manager and extract the zip, move the `.dll` files from `/bin/` to `/`.
   - Run the executable
   - Download the the current version of the SDK, and the device.
-
+- `git clone` this repository.
+- Run the program from anywhere within the repo.
+  - On first run, you will be required to generate a private key for the resulting watch face. Ensure that this is stored outside of the repo for your convenience.
+- Within this repo, navigate to `/bin/`. The resulting `.prg` file is the compiled watch face.
+- Add the watch face to your watch.
+  - Plug in your compatible Garmin wearable to your computer. If pin protected, enter the pin on the device to gain access to it's internal storage.
+  - Navigate to `/GARMIN/Apps/`.
+  - Drag and drop the watch face into this folder.
+  - Eject the watch 
 
 ## Dev List
 
