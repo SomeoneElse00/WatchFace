@@ -41,11 +41,13 @@
   - [ ] Sleep Score --> Sleep Need
   - [ ] Last Activity?
 - [ ] Add Progress Bars
-  - [ ] Sunrise, Sundown, and Sun is not up
-  - [ ] Intensity Minutes Progress
+  - [x] Sunrise, Sundown, and Sun is not up
+  - [x] Intensity Minutes Progress
   - [x] Battery Life
-    - [ ] switch battery life bar to other side (right)
-  - [ ] Custom Bar #4?
+    - [x] switch battery life bar to other side (right)
+  - [ ] Custom Bar #4
+    - [x] Added
+    - [ ] Allocate Feature
 - [ ] Add Icons for Status
   - [ ] Bluetooth Disconnected
   - [ ] Alarm is Set

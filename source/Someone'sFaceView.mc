@@ -139,6 +139,15 @@ class Someone_sFaceView extends WatchUi.WatchFace {
         var batteryStatus = System.getSystemStats().battery;
         var batteryDays = System.getSystemStats().batteryInDays;
 
+        //Get Intensity Minutes
+        var intensityStatus = ActivityMonitor.getInfo().activeMinutesWeek.total;
+        var intensityGoal = ActivityMonitor.getInfo().activeMinutesWeekGoal;
+        var intensityGoalProgress = null;
+        if (intensityStatus != null && intensityGoal != null){
+            intensityGoalProgress = intensityStatus*1.0/ ActivityMonitor.getInfo().activeMinutesWeekGoal;
+        }
+        
+
         // ---------- Update the Watch Face ----------
 
         // Update the time
@@ -230,16 +239,15 @@ class Someone_sFaceView extends WatchUi.WatchFace {
         var HEIGHT = dc.getHeight();
         var ARC_WIDTH = 6;
         var ARC_LENGTH = 60;
+        var colorTransparent = Graphics.COLOR_TRANSPARENT;
         dc.setPenWidth(ARC_WIDTH);
 
-        // Battery Progress Bar
+        // ----- Battery Progress Bar -----
         var colorBatteryCharged = Graphics.COLOR_GREEN;
         var colorBatteryDischarged = Graphics.COLOR_DK_GRAY;
-        var colorBatteryBackground = Application.Properties.getValue("BackgroundColor");
-        var colorTransparent = Graphics.COLOR_TRANSPARENT;
 
         dc.setColor(colorBatteryDischarged, colorTransparent);
-        dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.495 - ARC_WIDTH/2, Graphics.ARC_CLOCKWISE, 180 + ARC_LENGTH/2, 180 - ARC_LENGTH / 2);
+        dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.495 - ARC_WIDTH/2, Graphics.ARC_CLOCKWISE, ARC_LENGTH/2, -ARC_LENGTH / 2);
         if (System.getSystemStats().charging) {
             colorBatteryCharged = Graphics.COLOR_BLUE;
             colorBatteryDischarged = colorBatteryCharged;
@@ -252,24 +260,102 @@ class Someone_sFaceView extends WatchUi.WatchFace {
             colorBatteryDischarged = colorBatteryCharged;
         }
         dc.setColor(colorBatteryCharged, colorTransparent);
-        dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.495 - ARC_WIDTH / 2, Graphics.ARC_CLOCKWISE,  180 + ARC_LENGTH / 2 , 180 + ARC_LENGTH / 2 - ARC_LENGTH * batteryStatus/100);
+        dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.495 - ARC_WIDTH / 2, Graphics.ARC_COUNTER_CLOCKWISE,  -ARC_LENGTH / 2 , ARC_LENGTH * batteryStatus/100 - ARC_LENGTH / 2);
 
         // charged portion
         dc.setColor(colorBatteryCharged, colorTransparent);
-        dc.fillCircle(WIDTH*0.5 - WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.745, ARC_WIDTH);
+        dc.fillCircle(WIDTH*0.5 + WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.745, ARC_WIDTH);
 
         // discharged portion
         dc.setColor(colorBatteryDischarged, colorTransparent);
-        dc.fillCircle(WIDTH*0.5 - WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.255, ARC_WIDTH);
+        dc.fillCircle(WIDTH*0.5 + WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.255, ARC_WIDTH);
+        
+        // ----- Sunrise Sundown Bar -----
+        var colorSunPast = Graphics.COLOR_DK_BLUE;
+        var colorSunRemaining = Graphics.COLOR_YELLOW;
+        var colorSunDown = Graphics.COLOR_DK_GRAY;
 
-        // border rings
-        dc.setColor(colorBatteryBackground, colorTransparent);
-        dc.setPenWidth((ARC_WIDTH)/2);
-        dc.drawCircle(WIDTH*0.5 - WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.745, ARC_WIDTH);
-        dc.drawCircle(WIDTH*0.5 - WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.255, ARC_WIDTH);
+        if (nextSun[0] == null or !nextSun[0]){
+            dc.setColor(colorSunDown, colorTransparent);
+            dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.495 - ARC_WIDTH/2, Graphics.ARC_CLOCKWISE, 90 + ARC_LENGTH/2, 90-ARC_LENGTH / 2);
+            dc.fillCircle(WIDTH * 0.255, HEIGHT*0.5 - HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
+            dc.fillCircle(WIDTH * 0.745, HEIGHT*0.5 - HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
+        } else {
+            var percentDaylight = now.subtract(todaySunRise).value()*1.0 / todaySunSet.subtract(todaySunRise).value();
+            
+            // Sun gone bar
+            dc.setColor(colorSunRemaining, colorTransparent);
+            dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.495 - ARC_WIDTH/2, Graphics.ARC_CLOCKWISE, 90 + ARC_LENGTH/2, 90-ARC_LENGTH / 2);
+
+            // Sun remaining bar
+            dc.setColor(colorSunPast, colorTransparent);
+            dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.495 - ARC_WIDTH/2, Graphics.ARC_CLOCKWISE, 90 + ARC_LENGTH/2, 90 + ARC_LENGTH / 2 - ARC_LENGTH*percentDaylight);
+
+            // Circle Caps
+            dc.fillCircle(WIDTH * 0.255, HEIGHT*0.5 - HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
+            dc.setColor(colorSunRemaining, colorTransparent);
+            dc.fillCircle(WIDTH * 0.745, HEIGHT*0.5 - HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
+        }
+
+        // ----- Active Hours Bar -----
+        var colorActiveCompleted = Graphics.COLOR_ORANGE;
+        var colorActiveGoal = Graphics.COLOR_DK_GRAY;
+
+        dc.setColor(colorActiveGoal, colorTransparent);
+        dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.495 - ARC_WIDTH/2, Graphics.ARC_CLOCKWISE, ARC_LENGTH/2 - 90, -90-ARC_LENGTH / 2);
+        
+        dc.setColor(colorActiveCompleted, colorTransparent);
+        if (intensityGoalProgress != null){
+            if (intensityGoalProgress >= 1){
+                intensityGoalProgress = 1;
+            }
+            if (intensityGoalProgress > 0){
+                dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.495 - ARC_WIDTH / 2, Graphics.ARC_COUNTER_CLOCKWISE, -90 -ARC_LENGTH / 2 , -90 -ARC_LENGTH / 2 + ARC_LENGTH * intensityGoalProgress);
+            }
+        }
+        if (intensityStatus == 0 or intensityStatus == null){
+            dc.setColor(colorActiveGoal, colorTransparent);
+        }
+        dc.fillCircle(WIDTH * 0.255, HEIGHT*0.5 + HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
+
+        dc.setColor(colorActiveGoal, colorTransparent);
+        
+        if (intensityGoalProgress == 1){
+            dc.setColor(colorActiveCompleted, colorTransparent);
+        }
+        dc.fillCircle(WIDTH * 0.745, HEIGHT*0.5 + HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
+
+        // ----- Progress Bar 4 ----- NEED TO ALLOCATE -----
+        var colorBar4On = Graphics.COLOR_GREEN;
+        var colorBar4Off = Graphics.COLOR_DK_GRAY;
+        
+        dc.setColor(colorBar4Off, colorTransparent);
+        dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.495 - ARC_WIDTH/2, Graphics.ARC_CLOCKWISE, 180 + ARC_LENGTH/2, 180 - ARC_LENGTH / 2);
+
+        dc.setColor(colorBar4On, colorTransparent);
+        //dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.495 - ARC_WIDTH / 2, Graphics.ARC_CLOCKWISE,  180 + ARC_LENGTH / 2 , 180 + ARC_LENGTH / 2 - ARC_LENGTH * **METRIC**/100);
+
+        // charged portion
+        dc.setColor(colorBar4On, colorTransparent);
+        dc.fillCircle(WIDTH*0.5 - WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.745, ARC_WIDTH);
 
         // discharged portion
-        
+        dc.setColor(colorBar4Off, colorTransparent);
+        dc.fillCircle(WIDTH*0.5 - WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.255, ARC_WIDTH);
+
+
+        // ----- all border rings -----
+        dc.setColor(Application.Properties.getValue("BackgroundColor"), colorTransparent);
+        dc.setPenWidth((ARC_WIDTH)/2);
+        dc.drawCircle(WIDTH*0.5 + WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.745, ARC_WIDTH);
+        dc.drawCircle(WIDTH*0.5 + WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.255, ARC_WIDTH);
+        dc.drawCircle(WIDTH*0.5 - WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.745, ARC_WIDTH);
+        dc.drawCircle(WIDTH*0.5 - WIDTH*0.485*Math.sqrt(3)/2, HEIGHT * 0.255, ARC_WIDTH);
+        dc.drawCircle(WIDTH * 0.255, HEIGHT*0.5 - HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
+        dc.drawCircle(WIDTH * 0.745, HEIGHT*0.5 - HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
+        dc.drawCircle(WIDTH * 0.255, HEIGHT*0.5 + HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
+        dc.drawCircle(WIDTH * 0.745, HEIGHT*0.5 + HEIGHT*0.485*Math.sqrt(3)/2, ARC_WIDTH);
+                
         // ---------- Dev Tools ----------
         // drawReferenceLines(dc);
     }
