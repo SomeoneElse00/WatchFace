@@ -57,6 +57,8 @@
   - [ ] Custom Bar #4
     - [x] Added
     - [ ] Allocate Feature
+- [ ] Allow changing settings
+  - [ ] Configure the settings menu
 - [ ] Add Icons for Status
   - [ ] Bluetooth Disconnected
   - [ ] Alarm is Set
