@@ -128,8 +128,8 @@ class WatchFaceView extends WatchUi.WatchFace {
             var bodyBatteryIterator = Toybox.SensorHistory.getBodyBatteryHistory(bodyBatteryOptions);
             currentBodyBattery = bodyBatteryIterator.next();
             if (currentBodyBattery != null){
-                var tenSecs = new Time.Duration(10);
-                if (tenSecs.lessThan(now.subtract(currentBodyBattery.when))){
+                var fifteenMins = new Time.Duration(60*15);
+                if (fifteenMins.lessThan(now.subtract(currentBodyBattery.when))){
                     currentBodyBattery = null;
                 }
             }
@@ -204,7 +204,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         if (currentBodyBattery != null){
             bodyBateryField.setText(currentBodyBattery.data.format("%d"));
         }else{
-            bodyBateryField.setText("");
+            bodyBateryField.setText("--");
         }
         
 
