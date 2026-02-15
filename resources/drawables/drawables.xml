@@ -6,5 +6,5 @@
 
     <!-- Bitmaps for Weather -->
     <bitmap id="bitmapWeatherSunny" filename="weather_sunny.svg" scaleX="15%" scaleY="15%"/>
-    <bitmap id="bitmapQuestion" filename="question.svg" scaleX="10%" scaleY="10%"/>
+    <bitmap id="bitmapQuestion" filename="question.svg" scaleX="15%" scaleY="15%"/>
 </drawables>
