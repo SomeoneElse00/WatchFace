@@ -9,6 +9,14 @@ import Toybox.Position;
 import Toybox.SensorHistory;
 
 class WatchFaceView extends WatchUi.WatchFace {
+
+    var bitmapHR;
+    var bitmapSunrise;
+    var bitmapBodyBattery;
+    var bitmapWeather;
+    var WIDTH;
+    var HEIGHT;
+
     function initialize() {
         WatchFace.initialize();
     }
@@ -16,12 +24,203 @@ class WatchFaceView extends WatchUi.WatchFace {
     // Load your resources here
     function onLayout(dc as Dc) as Void {
         setLayout(Rez.Layouts.WatchFace(dc));
+
+        // ---------- Initialize General Vars ----------
+
+        WIDTH = dc.getWidth();
+        HEIGHT = dc.getHeight();
+
     }
 
     // Called when this View is brought to the foreground. Restore
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
     function onShow() as Void {
+
+        // ---------- Initialize Bitmaps ----------
+        /*bitmapHR = new WatchUi.Bitmap({
+            :rezID => Rez.Drawables.bitmapHR,
+            :locX => WIDTH*0.3,
+            :locy => HEIGHT*0.2
+        });*/
+        bitmapHR = WatchUi.loadResource(Rez.Drawables.bitmapHR);
+        bitmapSunrise = WatchUi.loadResource(Rez.Drawables.bitmapSunrise);
+        bitmapBodyBattery = WatchUi.loadResource(Rez.Drawables.bitmapBodyBattery);
+
+        // load bitmap for weather
+
+        switch (Weather.getCurrentConditions().condition) {
+            case Weather.CONDITION_CLEAR:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);
+                break;
+            case Weather.CONDITION_PARTLY_CLOUDY:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_MOSTLY_CLOUDY:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_RAIN:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_SNOW:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_WINDY:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_THUNDERSTORMS:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_WINTRY_MIX:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_FOG:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_HAZY:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_HAIL:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_SCATTERED_SHOWERS:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_SCATTERED_THUNDERSTORMS:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_UNKNOWN_PRECIPITATION:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_LIGHT_RAIN:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_HEAVY_RAIN:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_LIGHT_SNOW:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_HEAVY_SNOW:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_LIGHT_RAIN_SNOW:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_HEAVY_RAIN_SNOW:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_CLOUDY:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_RAIN_SNOW:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_PARTLY_CLEAR:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_MOSTLY_CLEAR:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_LIGHT_SHOWERS:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_SHOWERS:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_HEAVY_SHOWERS:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_CHANCE_OF_SHOWERS:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_CHANCE_OF_THUNDERSTORMS:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_MIST:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_DUST:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_DRIZZLE:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_TORNADO:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_SMOKE:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_ICE:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_SAND:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_SQUALL:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_SANDSTORM:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_VOLCANIC_ASH:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_HAZE:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_FAIR:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_HURRICANE:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_TROPICAL_STORM:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_CHANCE_OF_SNOW:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_CHANCE_OF_RAIN_SNOW:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_CLOUDY_CHANCE_OF_RAIN:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_CLOUDY_CHANCE_OF_SNOW:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_CLOUDY_CHANCE_OF_RAIN_SNOW:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_FLURRIES:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_FREEZING_RAIN:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_SLEET:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_ICE_SNOW:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            case Weather.CONDITION_THIN_CLOUDS:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);//unassigned
+                break;
+            default:
+                bitmapWeather = WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                break;
+        }
+
+    }
+
+    // Called when this View is removed from the screen. Save the
+    // state of this View here. This includes freeing resources from
+    // memory.
+    function onHide() as Void {
+        bitmapHR = null;
     }
 
     // Update the view
@@ -152,7 +351,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         // Update the time
         var fieldTime = View.findDrawableById("TimeLabel") as Text;
-        //time.setColor(Application.Properties.getValue("TimeColor") as Number);
+        fieldTime.setColor(Application.Properties.getValue("TimeColor") as Number);
         fieldTime.setText(timeString);
         if(!systemSettings.is24Hour or !Application.Properties.getValue("TimeColon")){
             fieldTime.locX = dc.getWidth() * 0.825;
@@ -161,17 +360,17 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         //Update the Seconds
         var fieldSecondsDigit = View.findDrawableById("seconds") as Text;
-        //seconds.setColor(Application.Properties.getValue("TimeColor") as Number);
+        fieldSecondsDigit.setColor(Application.Properties.getValue("TimeColor") as Number);
         fieldSecondsDigit.setText(secs.format("%02d"));
 
         // Update Day of Week and Day
         var fieldDateString = View.findDrawableById("dateString") as Text;
-        //text1Label.setColor(Application.Properties.getValue("ForegroundColor") as Number);
+        fieldDateString.setColor(Application.Properties.getValue("ForegroundColor") as Number);
         fieldDateString.setText(dateString);
 
         // Update Heart Rate Data
         var fieldHR = View.findDrawableById("heartRate") as Text;
-        //hr.setColor(Application.Properties.getValue("TimeColor") as Number);
+        fieldHR.setColor(Application.Properties.getValue("ForegroundColor") as Number);
         if (hrData == null or hrData == ActivityMonitor.INVALID_HR_SAMPLE){
             fieldHR.setText("--");
         }else{
@@ -180,7 +379,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         
         // Update Sun Status
         var fieldSunData = View.findDrawableById("sun") as Text;
-        //sun.setColor(Application.Properties.getValue("ForegroundColor") as Number);
+        fieldSunData.setColor(Application.Properties.getValue("ForegroundColor") as Number);
         if (nextSun[0] != null){
             fieldSunData.setText(convertTime(nextSun[1], nextSun[2]));
             //Lang.format("$1$:$2$", [sun[1].hour, sun[1].minute]));
@@ -194,13 +393,14 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         // Update Temperature
         var fieldTempData = View.findDrawableById("weather") as Text;
+        fieldTempData.setColor(Application.Properties.getValue("ForegroundColor") as Number);
         if (currentTemperature != null){
             fieldTempData.setText(currentTemperature.format("%d"));
         }
 
         // Update Body Battery
         var bodyBateryField = View.findDrawableById("bodyBattery") as Text;
-
+        bodyBateryField.setColor(Application.Properties.getValue("ForegroundColor") as Number);
         if (currentBodyBattery != null){
             bodyBateryField.setText(currentBodyBattery.data.format("%d"));
         }else{
@@ -217,12 +417,14 @@ class WatchFaceView extends WatchUi.WatchFace {
             // Update UTC
             // time.setColor(Application.Properties.getValue("??????") as Number);
             utcText.setText((utcSecs/3600 % 24).format("%02d"));
+            utcText.setColor(Application.Properties.getValue("ForegroundColor") as Number);
 
             // Print +30 Min timezone notice
             offset %= 3600;
             if (offset != 0) { // (true)
                 var utcNewfoundland = View.findDrawableById("newfoundland") as Text;
                 utcNewfoundland.setText((offset/60).format("%02d"));
+                utcNewfoundland.setColor(Application.Properties.getValue("ForegroundColor") as Number);
                 //utcNewfoundland.setText("-30");
             }
         }else{
@@ -235,8 +437,6 @@ class WatchFaceView extends WatchUi.WatchFace {
         View.onUpdate(dc);
 
         // ---------- Draw Progress Bars ----------
-        var WIDTH = dc.getWidth();
-        var HEIGHT = dc.getHeight();
         var ARC_WIDTH = HEIGHT/55;//scaling goal is for a 454 pixel display to have a width of approximateley 8.
         var ARC_LENGTH = 70;
         var colorTransparent = Graphics.COLOR_TRANSPARENT;
@@ -297,6 +497,8 @@ class WatchFaceView extends WatchUi.WatchFace {
                 HEIGHT * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
                 ARC_WIDTH
             );
+            //Sunrise Icon
+            dc.drawBitmap(WIDTH*0.80, HEIGHT*0.20, bitmapSunrise);
         } else {
             var percentDaylight = now.subtract(todaySunRise).value()*1.0 / todaySunSet.subtract(todaySunRise).value();
             
@@ -320,6 +522,9 @@ class WatchFaceView extends WatchUi.WatchFace {
                 HEIGHT * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
                 ARC_WIDTH
             );
+
+            //Sunrise Icon
+            dc.drawBitmap(WIDTH*0.8, HEIGHT*0.20, bitmapSunrise);
         }
 
         // ----- Active Hours Bar -----
@@ -427,15 +632,18 @@ class WatchFaceView extends WatchUi.WatchFace {
             HEIGHT * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
             ARC_WIDTH
         );
-                
+
+        // ---------- Draw Shapes ----------
+
+        dc.drawBitmap(WIDTH*0.10, HEIGHT*0.18, bitmapWeather); //Icon Top Left
+        //dc.drawBitmap(WIDTH*??, HEIGHT*??, bitmapSunrise); //Drawn Earlier. Icon Top Right
+        dc.drawBitmap(WIDTH*0.12, HEIGHT*0.69, bitmapHR); //Icon Bottom Left
+        dc.drawBitmap(WIDTH*0.78, HEIGHT*0.70, bitmapBodyBattery); //Icon Bottom Right
+
+        //bitmapHR.draw(dc);
+
         // ---------- Dev Tools ----------
         // drawReferenceLines(dc);
-    }
-
-    // Called when this View is removed from the screen. Save the
-    // state of this View here. This includes freeing resources from
-    // memory.
-    function onHide() as Void {
     }
 
     // The user has just looked at their watch. Timers and animations may be started here.

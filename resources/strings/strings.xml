@@ -5,7 +5,7 @@
     <string id="BackgroundColorTitle">Background Color</string>
     <string id="ForegroundColorTitle">Foreground Color</string>
     <string id="TimeColorTitle">Time Color</string>
-    <string id="TimeColonAddTitle">Include Colon in Time</string>
+    <string id="TimeColonAddTitle">Colon in Time</string>
     <string id="MilitaryFormatTitle">Leading 0 H (24H Time)</string>
     <string id="ShowUTCTitle">Show hour in UTC+0</string>k
 
