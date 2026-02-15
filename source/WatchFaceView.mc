@@ -10,14 +10,26 @@ import Toybox.SensorHistory;
 
 class WatchFaceView extends WatchUi.WatchFace {
 
+    // ----- Bitmap References -----
     var bitmapHR;
     var bitmapSunrise;
     var bitmapBodyBattery;
     var bitmapWeather;
+
+    // ----- Watch Dimension Constants -----
     var WIDTH;
     var HEIGHT;
+    var ARC_WIDTH;
+    var ARC_LENGTH;
+    var ARC_SIN;
+    var ARC_COS;
+
+    // ----- Time Constants -----
     var oneDay;
     var fifteenMins;
+
+    // ----- Debug Switch -----
+    var initCalcs;
 
     function initialize() {
         WatchFace.initialize();
@@ -31,8 +43,13 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         WIDTH = dc.getWidth();
         HEIGHT = dc.getHeight();
+        ARC_WIDTH = HEIGHT/55; //scaling goal is for a 454 pixel display to have a width of approximateley 8.
+        ARC_LENGTH = 70;
+        ARC_SIN = Math.sin(Math.toRadians(ARC_LENGTH/2));
+        ARC_COS = Math.cos(Math.toRadians(ARC_LENGTH/2));
         oneDay = new Time.Duration(Gregorian.SECONDS_PER_DAY);
         fifteenMins = new Time.Duration(60*15);
+        initCalcs = true;
     }
 
     // Called when this View is brought to the foreground. Restore
@@ -391,7 +408,6 @@ class WatchFaceView extends WatchUi.WatchFace {
                 var utcNewfoundland = View.findDrawableById("newfoundland") as Text;
                 utcNewfoundland.setText((offset/60).format("%02d"));
                 utcNewfoundland.setColor(Application.Properties.getValue("ForegroundColor") as Number);
-                //utcNewfoundland.setText("-30");
             }
         }else{
             utcText.setText("");
@@ -403,8 +419,6 @@ class WatchFaceView extends WatchUi.WatchFace {
         View.onUpdate(dc);
 
         // ---------- Draw Progress Bars ----------
-        var ARC_WIDTH = HEIGHT/55;//scaling goal is for a 454 pixel display to have a width of approximateley 8.
-        var ARC_LENGTH = 70;
         var colorTransparent = Graphics.COLOR_TRANSPARENT;
         dc.setPenWidth(ARC_WIDTH);
 
@@ -430,18 +444,17 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         // charged portion
         dc.setColor(colorBatteryCharged, colorTransparent);
-
         dc.fillCircle(
-            WIDTH * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-            HEIGHT * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            WIDTH * 0.5 + ARC_COS * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 + ARC_SIN * (HEIGHT*0.5 - ARC_WIDTH),
             ARC_WIDTH
         );
 
         // discharged portion
         dc.setColor(colorBatteryDischarged, colorTransparent);
         dc.fillCircle(
-            WIDTH * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-            HEIGHT * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            WIDTH * 0.5 + ARC_COS * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 - ARC_SIN * (HEIGHT*0.5 - ARC_WIDTH),
             ARC_WIDTH
         );
         
@@ -454,13 +467,13 @@ class WatchFaceView extends WatchUi.WatchFace {
             dc.setColor(colorSunDown, colorTransparent);
             dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.5 - ARC_WIDTH, Graphics.ARC_CLOCKWISE, 90 + ARC_LENGTH/2, 90-ARC_LENGTH / 2);
             dc.fillCircle(
-                WIDTH * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-                HEIGHT * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+                WIDTH * 0.5 - ARC_SIN * (WIDTH*0.5 - ARC_WIDTH),
+                HEIGHT * 0.5 - ARC_COS * (HEIGHT*0.5 - ARC_WIDTH),
                 ARC_WIDTH
             );
             dc.fillCircle(
-                WIDTH * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5- ARC_WIDTH),
-                HEIGHT * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+                WIDTH * 0.5 + ARC_SIN * (WIDTH*0.5- ARC_WIDTH),
+                HEIGHT * 0.5 - ARC_COS * (HEIGHT*0.5 - ARC_WIDTH),
                 ARC_WIDTH
             );
             //Sunrise Icon
@@ -478,14 +491,14 @@ class WatchFaceView extends WatchUi.WatchFace {
 
             // Circle Caps
             dc.fillCircle(
-                WIDTH * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-                HEIGHT * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+                WIDTH * 0.5 - ARC_SIN * (WIDTH*0.5 - ARC_WIDTH),
+                HEIGHT * 0.5 - ARC_COS * (HEIGHT*0.5 - ARC_WIDTH),
                 ARC_WIDTH
             );
             dc.setColor(colorSunRemaining, colorTransparent);
             dc.fillCircle(
-                WIDTH * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-                HEIGHT * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+                WIDTH * 0.5 + ARC_SIN * (WIDTH*0.5 - ARC_WIDTH),
+                HEIGHT * 0.5 - ARC_COS * (HEIGHT*0.5 - ARC_WIDTH),
                 ARC_WIDTH
             );
 
@@ -513,8 +526,8 @@ class WatchFaceView extends WatchUi.WatchFace {
             dc.setColor(colorActiveIncomplete, colorTransparent);
         }
         dc.fillCircle(
-            WIDTH * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-            HEIGHT * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            WIDTH * 0.5 - ARC_SIN * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 + ARC_COS * (HEIGHT*0.5 - ARC_WIDTH),
             ARC_WIDTH
         );
         
@@ -524,8 +537,8 @@ class WatchFaceView extends WatchUi.WatchFace {
             dc.setColor(colorActiveCompleted, colorTransparent);
         }
         dc.fillCircle(
-            WIDTH * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-            HEIGHT * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            WIDTH * 0.5 + ARC_SIN * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 + ARC_COS * (HEIGHT*0.5 - ARC_WIDTH),
             ARC_WIDTH
         );
 
@@ -542,16 +555,16 @@ class WatchFaceView extends WatchUi.WatchFace {
         // charged portion
         dc.setColor(colorBar4On, colorTransparent);
         dc.fillCircle(
-            WIDTH * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-            HEIGHT * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            WIDTH * 0.5 - ARC_COS * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 + ARC_SIN * (HEIGHT*0.5 - ARC_WIDTH),
             ARC_WIDTH
         );
 
         // discharged portion
         dc.setColor(colorBar4Off, colorTransparent);
         dc.fillCircle(
-            WIDTH * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-            HEIGHT * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            WIDTH * 0.5 - ARC_COS * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 - ARC_SIN * (HEIGHT*0.5 - ARC_WIDTH),
             ARC_WIDTH
         );
 
@@ -559,43 +572,43 @@ class WatchFaceView extends WatchUi.WatchFace {
         dc.setColor(Application.Properties.getValue("BackgroundColor"), colorTransparent);
         dc.setPenWidth((ARC_WIDTH)/2);
         dc.drawCircle(//bottom bar, right side
-            WIDTH * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-            HEIGHT * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            WIDTH * 0.5 + ARC_SIN * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 + ARC_COS * (HEIGHT*0.5 - ARC_WIDTH),
             ARC_WIDTH
         );
         dc.drawCircle(//top bar, right side
-            WIDTH * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-            HEIGHT * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            WIDTH * 0.5 + ARC_SIN * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 - ARC_COS * (HEIGHT*0.5 - ARC_WIDTH),
             ARC_WIDTH
         );
         dc.drawCircle(//bottom bar, left side
-            WIDTH * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-            HEIGHT * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            WIDTH * 0.5 - ARC_SIN * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 + ARC_COS * (HEIGHT*0.5 - ARC_WIDTH),
             ARC_WIDTH
         );
         dc.drawCircle(//top bar, left side
-            WIDTH * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-            HEIGHT * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            WIDTH * 0.5 - ARC_SIN * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 - ARC_COS * (HEIGHT*0.5 - ARC_WIDTH),
             ARC_WIDTH
         );
         dc.drawCircle(//right bar, bottom side
-            WIDTH * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-            HEIGHT * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            WIDTH * 0.5 + ARC_COS * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 + ARC_SIN * (HEIGHT*0.5 - ARC_WIDTH),
             ARC_WIDTH
         );
         dc.drawCircle(//right bar, top side
-            WIDTH * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-            HEIGHT * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            WIDTH * 0.5 + ARC_COS * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 - ARC_SIN * (HEIGHT*0.5 - ARC_WIDTH),
             ARC_WIDTH
         );
         dc.drawCircle(//left bar, bottom side
-            WIDTH * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-            HEIGHT * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            WIDTH * 0.5 - ARC_COS * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 + ARC_SIN * (HEIGHT*0.5 - ARC_WIDTH),
             ARC_WIDTH
         );
         dc.drawCircle(//left bar, top side
-            WIDTH * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
-            HEIGHT * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            WIDTH * 0.5 - ARC_COS * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 - ARC_SIN * (HEIGHT*0.5 - ARC_WIDTH),
             ARC_WIDTH
         );
 
@@ -610,6 +623,10 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         // ---------- Dev Tools ----------
         // drawReferenceLines(dc);
+        if (initCalcs){
+            debugCalculateRings();
+            initCalcs = false;
+        }
     }
 
     // The user has just looked at their watch. Timers and animations may be started here.
@@ -679,4 +696,56 @@ class WatchFaceView extends WatchUi.WatchFace {
         dc.fillRectangle(0.6666 * WIDTH, 0, 1, HEIGHT);
     }
 
+    function debugCalculateRings (){
+        var ARC_WIDTH = HEIGHT/55;//scaling goal is for a 454 pixel display to have a width of approximateley 8.
+        var ARC_LENGTH = 70;
+        System.println(Lang.format("Active Mins - Right: ($1$, $2$) | xmult=$3$ | ymult=$4$", [
+            WIDTH * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            Math.sin(Math.toRadians(ARC_LENGTH/2)),
+            Math.cos(Math.toRadians(ARC_LENGTH/2))]
+        ));
+        System.println(Lang.format("Sun - Right: ($1$, $2$) | xmult=$3$ | ymult=$4$", [
+            WIDTH * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            Math.sin(Math.toRadians(ARC_LENGTH/2)),
+            Math.cos(Math.toRadians(ARC_LENGTH/2))])
+        );
+        System.println(Lang.format("Active Mins - Left: ($1$, $2$) | xmult=$3$ | ymult=$4$", [
+            WIDTH * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            Math.sin(Math.toRadians(ARC_LENGTH/2)),
+            Math.cos(Math.toRadians(ARC_LENGTH/2))])
+        );
+        System.println(Lang.format("Sun - Left: ($1$, $2$) | xmult=$3$ | ymult=$4$", [
+            WIDTH * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            Math.sin(Math.toRadians(ARC_LENGTH/2)),
+            Math.cos(Math.toRadians(ARC_LENGTH/2))])
+        );
+        System.println(Lang.format("Battery - Bottom: ($1$, $2$) | xmult=$3$ | ymult=$4$", [
+            WIDTH * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            Math.cos(Math.toRadians(ARC_LENGTH/2)),
+            Math.sin(Math.toRadians(ARC_LENGTH/2))])
+        );
+        System.println(Lang.format("Battery - Top: ($1$, $2$) | xmult=$3$ | ymult=$4$", [
+            WIDTH * 0.5 + Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            Math.cos(Math.toRadians(ARC_LENGTH/2)),
+            Math.sin(Math.toRadians(ARC_LENGTH/2))])
+        );
+        System.println(Lang.format("Bar 4 - Bottom: ($1$, $2$) | xmult=$3$ | ymult=$4$", [
+            WIDTH * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 + Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            Math.cos(Math.toRadians(ARC_LENGTH/2)),
+            Math.sin(Math.toRadians(ARC_LENGTH/2))])
+        );
+        System.println(Lang.format("Bar 4 - Top: ($1$, $2$) | xmult=$3$ | ymult=$4$", [
+            WIDTH * 0.5 - Math.cos(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
+            HEIGHT * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (HEIGHT*0.5 - ARC_WIDTH),
+            Math.cos(Math.toRadians(ARC_LENGTH/2)),
+            Math.sin(Math.toRadians(ARC_LENGTH/2))])
+        );
+    }
 }
