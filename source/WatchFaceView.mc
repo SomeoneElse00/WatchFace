@@ -477,7 +477,7 @@ class WatchFaceView extends WatchUi.WatchFace {
                 ARC_WIDTH
             );
             //Sunrise Icon
-            dc.drawBitmap(WIDTH*0.80, HEIGHT*0.20, bitmapSunrise);
+            dc.drawBitmap(WIDTH*0.78, HEIGHT*0.20, bitmapSunrise);
         } else {
             var percentDaylight = now.subtract(todaySunRise).value()*1.0 / todaySunSet.subtract(todaySunRise).value();
             
@@ -503,7 +503,7 @@ class WatchFaceView extends WatchUi.WatchFace {
             );
 
             //Sunrise Icon
-            dc.drawBitmap(WIDTH*0.8, HEIGHT*0.20, bitmapSunrise);
+            dc.drawBitmap(WIDTH*0.78, HEIGHT*0.20, bitmapSunrise);
         }
 
         // ----- Active Hours Bar -----
@@ -622,11 +622,11 @@ class WatchFaceView extends WatchUi.WatchFace {
         //bitmapHR.draw(dc);
 
         // ---------- Dev Tools ----------
-        // drawReferenceLines(dc);
-        if (initCalcs){
+        //drawReferenceLines(dc);
+        /*if (initCalcs){
             debugCalculateRings();
             initCalcs = false;
-        }
+        }*/
     }
 
     // The user has just looked at their watch. Timers and animations may be started here.
