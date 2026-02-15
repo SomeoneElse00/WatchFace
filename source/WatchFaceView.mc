@@ -16,6 +16,8 @@ class WatchFaceView extends WatchUi.WatchFace {
     var bitmapWeather;
     var WIDTH;
     var HEIGHT;
+    var oneDay;
+    var fifteenMins;
 
     function initialize() {
         WatchFace.initialize();
@@ -25,11 +27,12 @@ class WatchFaceView extends WatchUi.WatchFace {
     function onLayout(dc as Dc) as Void {
         setLayout(Rez.Layouts.WatchFace(dc));
 
-        // ---------- Initialize General Vars ----------
+        // ---------- Initialize General & Static Vars ----------
 
         WIDTH = dc.getWidth();
         HEIGHT = dc.getHeight();
-
+        oneDay = new Time.Duration(Gregorian.SECONDS_PER_DAY);
+        fifteenMins = new Time.Duration(60*15);
     }
 
     // Called when this View is brought to the foreground. Restore
@@ -235,31 +238,6 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         // Get the current time and format it correctly
         var currentTime = System.getClockTime();
-        var timeString = convertTime(currentTime.hour, currentTime.min);
-
-        /*
-        var timeFormat = "$1$:$2$";
-        var clockTime = System.getClockTime();
-        var hours = clockTime.hour;
-        var mins = clockTime.min;
-
-        if (!Application.Properties.getValue("TimeColon")) {
-            timeFormat = "$1$$2$";
-        }
-
-        if (!settings.is24Hour) {
-            if (hours > 12) {
-                hours = hours - 12;
-            } else if (hours == 0) {
-                hours = 12;
-            }
-        } else {
-            if (Application.Properties.getValue("UseMilitaryFormat")) {
-                hours = hours.format("%02d");
-            }
-        }
-        var timeString = Lang.format(timeFormat, [hours, mins.format("%02d")]);
-        */
 
         // Get UTC information
         var secs = currentTime.sec;
@@ -269,10 +247,6 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         // Get and format Weekday and Date
         var dayInfo = Gregorian.info(now, Time.FORMAT_MEDIUM);
-        var dateString = Lang.format("$1$ $2$", [
-            dayInfo.day_of_week.toUpper(),
-            dayInfo.day
-        ]);
 
         // Get Heart Rate Info
         var hrData = Toybox.ActivityMonitor.getHeartRateHistory(1,true).next().heartRate;
@@ -286,7 +260,6 @@ class WatchFaceView extends WatchUi.WatchFace {
         if (todaySunRise != null && todaySunSet != null) {
             if (now.value() > todaySunRise.value()) {
                 if (now.value() > todaySunSet.value()){
-                    var oneDay = new Time.Duration(Gregorian.SECONDS_PER_DAY);
                     var tomorrow = now.add(oneDay);
                     nextSunEvent = Weather.getSunrise(currentLocation.position, tomorrow);
                     nextSun[0] = false;
@@ -311,39 +284,32 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         // Get Current Weather
         var currentWeather = Weather.getCurrentConditions();
-        var currentTemperature = null;
-        if (currentWeather != null){
-            currentTemperature = currentWeather.temperature;
-        }
 
         // Get Body Battery
         var currentBodyBattery = null;
         if ((Toybox has :SensorHistory) && (Toybox.SensorHistory has :getBodyBatteryHistory)){
             var bodyBatteryOptions = {
-                :period => 1,
+                :period => fifteenMins,
                 :order => SensorHistory.ORDER_NEWEST_FIRST
             };
             //currentBodyBattery = Toybox.SensorHistory.getBodyBatteryHistory(bodyBatteryOptions);//({});
             var bodyBatteryIterator = Toybox.SensorHistory.getBodyBatteryHistory(bodyBatteryOptions);
             currentBodyBattery = bodyBatteryIterator.next();
-            if (currentBodyBattery != null){
-                var fifteenMins = new Time.Duration(60*15);
+            /*if (currentBodyBattery != null){
                 if (fifteenMins.lessThan(now.subtract(currentBodyBattery.when))){
                     currentBodyBattery = null;
                 }
-            }
+            }*/
         }
 
         //Get Watch Battery
-        var batteryStatus = System.getSystemStats().battery;
-        var batteryDays = System.getSystemStats().batteryInDays;
+        var batteryStats = System.getSystemStats();
 
         //Get Intensity Minutes
-        var intensityStatus = ActivityMonitor.getInfo().activeMinutesWeek.total;
-        var intensityGoal = ActivityMonitor.getInfo().activeMinutesWeekGoal;
+        var activityInfo = ActivityMonitor.getInfo();
         var intensityGoalProgress = null;
-        if (intensityStatus != null && intensityGoal != null){
-            intensityGoalProgress = intensityStatus*1.0/ ActivityMonitor.getInfo().activeMinutesWeekGoal;
+        if (activityInfo.activeMinutesWeek.total != null && activityInfo.activeMinutesWeekGoal != null){
+            intensityGoalProgress = activityInfo.activeMinutesWeek.total*1.0/ activityInfo.activeMinutesWeekGoal;
         }
         
 
@@ -352,7 +318,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         // Update the time
         var fieldTime = View.findDrawableById("TimeLabel") as Text;
         fieldTime.setColor(Application.Properties.getValue("TimeColor") as Number);
-        fieldTime.setText(timeString);
+        fieldTime.setText(convertTime(currentTime.hour, currentTime.min));
         if(!systemSettings.is24Hour or !Application.Properties.getValue("TimeColon")){
             fieldTime.locX = dc.getWidth() * 0.825;
             fieldTime.setJustification(Graphics.TEXT_JUSTIFY_RIGHT);
@@ -366,7 +332,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         // Update Day of Week and Day
         var fieldDateString = View.findDrawableById("dateString") as Text;
         fieldDateString.setColor(Application.Properties.getValue("ForegroundColor") as Number);
-        fieldDateString.setText(dateString);
+        fieldDateString.setText(Lang.format("$1$ $2$", [dayInfo.day_of_week.toUpper(), dayInfo.day]));
 
         // Update Heart Rate Data
         var fieldHR = View.findDrawableById("heartRate") as Text;
@@ -394,8 +360,8 @@ class WatchFaceView extends WatchUi.WatchFace {
         // Update Temperature
         var fieldTempData = View.findDrawableById("weather") as Text;
         fieldTempData.setColor(Application.Properties.getValue("ForegroundColor") as Number);
-        if (currentTemperature != null){
-            fieldTempData.setText(currentTemperature.format("%d"));
+        if (currentWeather != null && currentWeather.temperature != null){
+            fieldTempData.setText(Lang.format("$1$$2$", [currentWeather.temperature.format("%d"), "°C"]));
         }
 
         // Update Body Battery
@@ -451,16 +417,16 @@ class WatchFaceView extends WatchUi.WatchFace {
         if (System.getSystemStats().charging) {
             colorBatteryCharged = Graphics.COLOR_BLUE;
             colorBatteryDischarged = colorBatteryCharged;
-        } else if(batteryDays < 3){
+        } else if(batteryStats.batteryInDays < 3){
             colorBatteryCharged = Graphics.COLOR_RED;
             colorBatteryDischarged = colorBatteryCharged;
-        }else if (batteryDays <= 5){
+        }else if (batteryStats.batteryInDays <= 5){
             colorBatteryCharged = Graphics.COLOR_YELLOW;
-        }else if (batteryDays > 10){
+        }else if (batteryStats.batteryInDays > 10){
             colorBatteryDischarged = colorBatteryCharged;
         }
         dc.setColor(colorBatteryCharged, colorTransparent);
-        dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.5 - ARC_WIDTH, Graphics.ARC_COUNTER_CLOCKWISE,  -ARC_LENGTH / 2 , ARC_LENGTH * batteryStatus/100 - ARC_LENGTH / 2);
+        dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.5 - ARC_WIDTH, Graphics.ARC_COUNTER_CLOCKWISE,  -ARC_LENGTH / 2 , ARC_LENGTH * batteryStats.battery/100 - ARC_LENGTH / 2);
 
         // charged portion
         dc.setColor(colorBatteryCharged, colorTransparent);
@@ -529,9 +495,9 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         // ----- Active Hours Bar -----
         var colorActiveCompleted = Graphics.COLOR_ORANGE;
-        var colorActiveGoal = Graphics.COLOR_DK_GRAY;
+        var colorActiveIncomplete = Graphics.COLOR_DK_GRAY;
 
-        dc.setColor(colorActiveGoal, colorTransparent);
+        dc.setColor(colorActiveIncomplete, colorTransparent);
         dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.5 - ARC_WIDTH, Graphics.ARC_CLOCKWISE, ARC_LENGTH/2 - 90, -90-ARC_LENGTH / 2);
         
         dc.setColor(colorActiveCompleted, colorTransparent);
@@ -543,8 +509,8 @@ class WatchFaceView extends WatchUi.WatchFace {
                 dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.5 - ARC_WIDTH, Graphics.ARC_COUNTER_CLOCKWISE, -90 -ARC_LENGTH / 2 , -90 -ARC_LENGTH / 2 + ARC_LENGTH * intensityGoalProgress);
             }
         }
-        if (intensityStatus == 0 or intensityStatus == null){
-            dc.setColor(colorActiveGoal, colorTransparent);
+        if (activityInfo.activeMinutesWeek.total == 0 or activityInfo.activeMinutesWeek.total == null){
+            dc.setColor(colorActiveIncomplete, colorTransparent);
         }
         dc.fillCircle(
             WIDTH * 0.5 - Math.sin(Math.toRadians(ARC_LENGTH/2)) * (WIDTH*0.5 - ARC_WIDTH),
@@ -552,7 +518,7 @@ class WatchFaceView extends WatchUi.WatchFace {
             ARC_WIDTH
         );
         
-        dc.setColor(colorActiveGoal, colorTransparent);
+        dc.setColor(colorActiveIncomplete, colorTransparent);
         
         if (intensityGoalProgress == 1){
             dc.setColor(colorActiveCompleted, colorTransparent);
