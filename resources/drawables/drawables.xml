@@ -1,3 +1,11 @@
 <drawables xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
     <bitmap id="LauncherIcon" filename="launcher_icon.svg" dithering="none" />
+    <bitmap id="bitmapHR" filename="heart.svg" scaleX="11%" scaleY="11%"/>
+    <bitmap id="bitmapSunrise" filename="up_arrow.svg" scaleX="10%" scaleY="10%"/>
+    <bitmap id="bitmapSunset" filename="down_arrow.svg" scaleX="10%" scaleY="10%"/>
+    <bitmap id="bitmapBodyBattery" filename="garmin_body_battery.svg" scaleX="10%" scaleY="10%"/>
+
+    <!-- Bitmaps for Weather -->
+    <bitmap id="bitmapWeatherSunny" filename="weather_sunny.svg" scaleX="15%" scaleY="15%"/>
+    <bitmap id="bitmapQuestion" filename="question.svg" scaleX="15%" scaleY="15%"/>
 </drawables>

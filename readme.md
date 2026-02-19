@@ -13,7 +13,7 @@
 - Install Java JRE from [Oracle](https://www.java.com/en/download/) (for compiling).
 - Install [VSCode](https://code.visualstudio.com) or [VSCodium](https://vscodium.com) as your IDE.
 - Install Garmin's `Monkey C` extension.
-  - If you are using vscodium, go to [this website](https://marketplace.visualstudio.com/_apis/public/gallery/publishers/Garmin/vsextensions/garmin.monkey-c/1.1.2/vspackage?targetPlatform=win32-x64). Modify the URL to increment the version number as required. The current version number can be checked [here](https://marketplace.visualstudio.com/items?itemName=garmin.monkey-c).  
+  - If you are using vscodium, go to [this website](https://marketplace.visualstudio.com/_apis/public/gallery/publishers/Garmin/vsextensions/monkey-c/1.1.2/vspackage/). Modify the URL to increment the version number as required. The current version number can be checked [here](https://marketplace.visualstudio.com/items?itemName=garmin.monkey-c).  
 - Grab the current SDK from [Garmin's website](https://developer.garmin.com/connect-iq/sdk/).  
   - Once you download the SDK manager and extract the zip, move the `.dll` files from `/bin/` to `/`.
   - Run the executable
@@ -82,6 +82,6 @@
 
 ## References
 
-I used and referenced code from this [medium article by Eric](https://medium.com/@ericbt/design-your-own-garmin-watch-face-21d004d38f99) as a starting and jumping-off point. The final product of his work is available on [GitHub](https://github.com/briquet9/garmin-watch-faces/tree/main) under an [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0.txt).  
+I used and referenced code from this [medium article by Eric](https://medium.com/@ericbt/design-your-own-garmin-watch-face-21d004d38f99) as a starting and jumping-off point. The final product of his work is available on [GitHub](https://github.com/briquet9/garmin-watch-faces/tree/main) under an [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0.txt). Code was also referenced from this [Garmin Forum article](https://forums.garmin.com/developer/connect-iq/f/discussion/349473/simple-example-wf-that-shows-a-bunch-of-things) showing an example of many advanced features in Monkey C. I referenced code in this app to build my settings menu using `Menu2`.  
 
 Generative AI was used in this project to assist with debugging and researching through the API and web for my approach for completing a given task. All code included in this project that was written by me is not a direct output of a Generative AI model, nor does it include minor tweaks (i.e. changing variable names) to not be contradictory to the previous claim. All ideas on the watch face's design are my own.  
