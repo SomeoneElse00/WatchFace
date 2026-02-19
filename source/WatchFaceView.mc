@@ -600,7 +600,7 @@ class WatchFaceView extends WatchUi.WatchFace {
             );
 
             //Sunrise Icon
-            dc.drawBitmap(WIDTH*0.78, HEIGHT*0.20, bitmapSunset);
+            dc.drawBitmap(WIDTH*0.78, HEIGHT*0.20, bitmapSun);
         }
 
         // ----- Active Hours Bar -----
