@@ -12,7 +12,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     // ----- Bitmap References -----
     var bitmapHR;
-    var bitmapSunrise;
+    var bitmapSun;
     var bitmapBodyBattery;
     var bitmapWeather;
 
@@ -64,7 +64,6 @@ class WatchFaceView extends WatchUi.WatchFace {
             :locy => HEIGHT*0.2
         });*/
         bitmapHR = WatchUi.loadResource(Rez.Drawables.bitmapHR);
-        bitmapSunrise = WatchUi.loadResource(Rez.Drawables.bitmapSunrise);
         bitmapBodyBattery = WatchUi.loadResource(Rez.Drawables.bitmapBodyBattery);
 
         // Get relative sun
@@ -331,7 +330,6 @@ class WatchFaceView extends WatchUi.WatchFace {
         // Get UTC information
         var secs = currentTime.sec;
         var offset = currentTime.timeZoneOffset;
-
         var utcSecs = (currentTime.hour * 3600) + (currentTime.min * 60) + secs - offset;
 
         // Get and format Weekday and Date
@@ -348,15 +346,19 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         if (todaySunRise != null && todaySunSet != null) {
             if (now.value() > todaySunRise.value()) {
+                //the sun has risen today
                 if (now.value() > todaySunSet.value()){
+                    //it is after sunset
                     var tomorrow = now.add(oneDay);
                     nextSunEvent = Weather.getSunrise(currentLocation.position, tomorrow);
                     nextSun[0] = false;
                 }else{
+                    //it is after sunrise and before sunset
                     nextSunEvent = todaySunSet;
                     nextSun[0] = true;
                 }
             }else{
+                //it is before sunrise
                 nextSunEvent = todaySunRise;
                 nextSun[0] = false;
             }
@@ -499,16 +501,30 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         dc.setColor(colorBatteryDischarged, colorTransparent);
         dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.5 - ARC_WIDTH, Graphics.ARC_CLOCKWISE, ARC_LENGTH/2, -ARC_LENGTH / 2);
-        if (System.getSystemStats().charging) {
-            colorBatteryCharged = Graphics.COLOR_BLUE;
-            colorBatteryDischarged = colorBatteryCharged;
-        } else if(batteryStats.batteryInDays < 3){
-            colorBatteryCharged = Graphics.COLOR_RED;
-            colorBatteryDischarged = colorBatteryCharged;
-        }else if (batteryStats.batteryInDays <= 5){
-            colorBatteryCharged = Graphics.COLOR_YELLOW;
-        }else if (batteryStats.batteryInDays > 10){
-            colorBatteryDischarged = colorBatteryCharged;
+        if (Activity.getActivityInfo() != null){
+            if (System.getSystemStats().charging) {
+                colorBatteryCharged = Graphics.COLOR_BLUE;
+                colorBatteryDischarged = colorBatteryCharged;
+            } else if(batteryStats.batteryInDays < 3){
+                colorBatteryCharged = Graphics.COLOR_RED;
+                colorBatteryDischarged = colorBatteryCharged;
+            }else if (batteryStats.batteryInDays <= 5){
+                colorBatteryCharged = Graphics.COLOR_YELLOW;
+            }else if (batteryStats.batteryInDays > 10){
+                colorBatteryDischarged = colorBatteryCharged;
+            }
+        }else{
+            if (System.getSystemStats().charging) {
+                colorBatteryCharged = Graphics.COLOR_BLUE;
+                colorBatteryDischarged = colorBatteryCharged;
+            } else if(batteryStats.battery < 15){
+                colorBatteryCharged = Graphics.COLOR_RED;
+                colorBatteryDischarged = colorBatteryCharged;
+            }else if (batteryStats.battery <= 30){
+                colorBatteryCharged = Graphics.COLOR_YELLOW;
+            }else if (batteryStats.batteryInDays > 85){
+                colorBatteryDischarged = colorBatteryCharged;
+            }
         }
         dc.setColor(colorBatteryCharged, colorTransparent);
         dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.5 - ARC_WIDTH, Graphics.ARC_COUNTER_CLOCKWISE,  -ARC_LENGTH / 2 , ARC_LENGTH * batteryStats.battery/100 - ARC_LENGTH / 2);
@@ -535,6 +551,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         var colorSunDown = Graphics.COLOR_DK_GRAY;
 
         if (nextSun[0] == null or !nextSun[0]){
+            //next sun event is unknown or sunrise
             dc.setColor(colorSunDown, colorTransparent);
             dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.5 - ARC_WIDTH, Graphics.ARC_CLOCKWISE, 90 + ARC_LENGTH/2, 90-ARC_LENGTH / 2);
             dc.fillCircle(
@@ -547,9 +564,18 @@ class WatchFaceView extends WatchUi.WatchFace {
                 HEIGHT * 0.5 - ARC_COS * (HEIGHT*0.5 - ARC_WIDTH),
                 ARC_WIDTH
             );
-            //Sunrise Icon
-            dc.drawBitmap(WIDTH*0.78, HEIGHT*0.20, bitmapSunrise);
+            if (!nextSun[0]){
+                //next sun event is sunrise
+                //Sunrise Icon
+                bitmapSun = WatchUi.loadResource(Rez.Drawables.bitmapSunset);
+                dc.drawBitmap(WIDTH*0.78, HEIGHT*0.20, bitmapSun);
+            }else{
+                //next sun event is unknown
+                bitmapSun = WatchUi.loadResource(Rez.Drawables.bitmapSunrise); //unassigned
+                dc.drawBitmap(WIDTH*0.78, HEIGHT*0.20, bitmapSun);//must rework to fit
+            }
         } else {
+            //next sun event is sunset
             var percentDaylight = now.subtract(todaySunRise).value()*1.0 / todaySunSet.subtract(todaySunRise).value();
             
             // Sun gone bar
@@ -574,7 +600,7 @@ class WatchFaceView extends WatchUi.WatchFace {
             );
 
             //Sunrise Icon
-            dc.drawBitmap(WIDTH*0.78, HEIGHT*0.20, bitmapSunrise);
+            dc.drawBitmap(WIDTH*0.78, HEIGHT*0.20, bitmapSunset);
         }
 
         // ----- Active Hours Bar -----
@@ -686,7 +712,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         // ---------- Draw Shapes ----------
 
         dc.drawBitmap(WIDTH*0.10, HEIGHT*0.18, bitmapWeather); //Icon Top Left
-        //dc.drawBitmap(WIDTH*??, HEIGHT*??, bitmapSunrise); //Drawn Earlier. Icon Top Right
+        //dc.drawBitmap(WIDTH*??, HEIGHT*??, bitmapSun); //Drawn Earlier. Icon Top Right
         dc.drawBitmap(WIDTH*0.12, HEIGHT*0.69, bitmapHR); //Icon Bottom Left
         dc.drawBitmap(WIDTH*0.78, HEIGHT*0.70, bitmapBodyBattery); //Icon Bottom Right
 

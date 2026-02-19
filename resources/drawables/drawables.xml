@@ -2,6 +2,7 @@
     <bitmap id="LauncherIcon" filename="launcher_icon.svg" dithering="none" />
     <bitmap id="bitmapHR" filename="heart.svg" scaleX="11%" scaleY="11%"/>
     <bitmap id="bitmapSunrise" filename="up_arrow.svg" scaleX="10%" scaleY="10%"/>
+    <bitmap id="bitmapSunset" filename="down_arrow.svg" scaleX="10%" scaleY="10%"/>
     <bitmap id="bitmapBodyBattery" filename="garmin_body_battery.svg" scaleX="10%" scaleY="10%"/>
 
     <!-- Bitmaps for Weather -->
