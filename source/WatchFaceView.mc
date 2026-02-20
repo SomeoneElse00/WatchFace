@@ -476,14 +476,14 @@ class WatchFaceView extends WatchUi.WatchFace {
 
             // Update UTC
             utcText.setText((utcSecs/3600 % 24).format("%02d"));
-            utcText.setColor(Application.Properties.getValue("ForegroundColor") as Number);
+            utcText.setColor(Application.Properties.getValue("TimeColor") as Number);
 
             // Print +30 Min timezone notice
             offset %= 3600;
             if (offset != 0) { // (true)
                 var utcNewfoundland = View.findDrawableById("newfoundland") as Text;
-                utcNewfoundland.setText((offset/60).format("%02d"));
-                utcNewfoundland.setColor(Application.Properties.getValue("ForegroundColor") as Number);
+                utcNewfoundland.setText((utcSecs/60%60).format("%02d"));
+                utcNewfoundland.setColor(Application.Properties.getValue("TimeColor") as Number);
             }
         }else{
             utcText.setText("");
