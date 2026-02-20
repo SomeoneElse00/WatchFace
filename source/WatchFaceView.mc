@@ -45,8 +45,8 @@ class WatchFaceView extends WatchUi.WatchFace {
         HEIGHT = dc.getHeight();
         ARC_WIDTH = HEIGHT/55; //scaling goal is for a 454 pixel display to have a width of approximateley 8.
         ARC_LENGTH = 70;
-        ARC_SIN = Math.sin(Math.toRadians(ARC_LENGTH/2));
-        ARC_COS = Math.cos(Math.toRadians(ARC_LENGTH/2));
+        ARC_SIN = Math.sin(Math.toRadians((ARC_LENGTH+5)/2));
+        ARC_COS = Math.cos(Math.toRadians((ARC_LENGTH+5)/2));
         oneDay = new Time.Duration(Gregorian.SECONDS_PER_DAY);
         fifteenMins = new Time.Duration(60*15);
         initCalcs = true;
@@ -486,6 +486,15 @@ class WatchFaceView extends WatchUi.WatchFace {
             utcText.setText("");
         }
 
+        // ---------- Draw Time Background Shape ----------
+        //var colorTransparent = Graphics.COLOR_TRANSPARENT;
+        /*dc.setColor(Application.Properties.getValue("AccentTimeBGColor") as Number, colorTransparent);
+        var hOffset = 0.07;
+        var vOffset = 0.36;
+        dc.fillRectangle(WIDTH*hOffset, HEIGHT*vOffset, WIDTH*(1-hOffset*2), HEIGHT*(1-vOffset*2));
+        dc.fillEllipse(WIDTH*hOffset, HEIGHT*0.5, WIDTH*hOffset-2.5*ARC_WIDTH,HEIGHT*(1-2*vOffset)/2);
+        dc.fillEllipse(WIDTH*(1-hOffset), HEIGHT*0.5, WIDTH*hOffset-2.5*ARC_WIDTH,HEIGHT*(1-2*vOffset)/2);*/
+
         // ---------- Send the Updates ----------
 
         // Call the parent onUpdate function to redraw the layout
@@ -567,11 +576,11 @@ class WatchFaceView extends WatchUi.WatchFace {
             if (nextSun[0] == null){
                 //next sun event is unknown
                 bitmapSun = WatchUi.loadResource(Rez.Drawables.bitmapSunrise); //unassigned
-                dc.drawBitmap(WIDTH*0.78, HEIGHT*0.20, bitmapSun);//must rework to fit
+                dc.drawBitmap(WIDTH*0.78, HEIGHT*0.225, bitmapSun);//must rework to fit
             }else{//next sun event is sunrise
                 //Sunrise Icon
                 bitmapSun = WatchUi.loadResource(Rez.Drawables.bitmapSunset);
-                dc.drawBitmap(WIDTH*0.78, HEIGHT*0.20, bitmapSun);
+                dc.drawBitmap(WIDTH*0.78, HEIGHT*0.225, bitmapSun);
             }
         } else {
             //next sun event is sunset
@@ -599,7 +608,7 @@ class WatchFaceView extends WatchUi.WatchFace {
             );
 
             //Sunrise Icon
-            dc.drawBitmap(WIDTH*0.78, HEIGHT*0.20, bitmapSun);
+            dc.drawBitmap(WIDTH*0.78, HEIGHT*0.225, bitmapSun);
         }
 
         // ----- Active Hours Bar -----
@@ -710,12 +719,22 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         // ---------- Draw Shapes ----------
 
-        dc.drawBitmap(WIDTH*0.10, HEIGHT*0.18, bitmapWeather); //Icon Top Left
+        dc.drawBitmap(WIDTH*0.10, HEIGHT*0.20, bitmapWeather); //Icon Top Left
         //dc.drawBitmap(WIDTH*??, HEIGHT*??, bitmapSun); //Drawn Earlier. Icon Top Right
-        dc.drawBitmap(WIDTH*0.12, HEIGHT*0.69, bitmapHR); //Icon Bottom Left
-        dc.drawBitmap(WIDTH*0.78, HEIGHT*0.70, bitmapBodyBattery); //Icon Bottom Right
+        dc.drawBitmap(WIDTH*0.12, HEIGHT*0.665, bitmapHR); //Icon Bottom Left
+        dc.drawBitmap(WIDTH*0.78, HEIGHT*0.673, bitmapBodyBattery); //Icon Bottom Right
 
-        //bitmapHR.draw(dc);
+        // ---------- Draw Border Lines ----------
+        dc.setPenWidth(1);
+        dc.setColor(Application.Properties.getValue("AccentLinesColor") as Number, colorTransparent);
+        dc.drawLine(WIDTH*0.17, HEIGHT*0.19, 
+                    WIDTH*0.83, HEIGHT*0.19);//Top divider line
+        dc.drawLine(WIDTH*0.17, HEIGHT*0.81, 
+                    WIDTH*0.83, HEIGHT*0.81);//bottom divider line
+        dc.drawLine(WIDTH*0.5, HEIGHT*0.22,
+                    WIDTH*0.5, HEIGHT*0.33);//Top centre line
+        dc.drawLine(WIDTH*0.5, HEIGHT*0.78,
+                    WIDTH*0.5, HEIGHT*0.67);//bottom centre line
 
         // ---------- Dev Tools ----------
         //drawReferenceLines(dc);
