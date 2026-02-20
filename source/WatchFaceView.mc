@@ -402,7 +402,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         if (activityInfo.activeMinutesWeek.total != null && activityInfo.activeMinutesWeekGoal != null){
             intensityGoalProgress = activityInfo.activeMinutesWeek.total*1.0/ activityInfo.activeMinutesWeekGoal;
         }
-        
+
         //Get Move Status
         var moveStatus = activityInfo.moveBarLevel;
         
@@ -558,7 +558,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         );
         
         // ----- Sunrise Sundown Bar -----
-        var colorSunPast = Graphics.COLOR_DK_BLUE;
+        var colorSunPast = Graphics.COLOR_BLUE;
         var colorSunRemaining = Graphics.COLOR_YELLOW;
         var colorSunDown = Graphics.COLOR_DK_GRAY;
 
