@@ -64,15 +64,15 @@
   - [ ] Alarm is Set
   - [ ] Do Not Disturb is On
 - [ ] Add Icons for the Custom Fields
-  - [ ] Heart Rate
-  - [ ] Sun
+  - [x] Heart Rate
+  - [x] Sun
   - [ ] Weather
-  - [ ] Body Battery
+  - [x] Body Battery
   - [ ] Recovery Time?
   - [ ] Notifications Icon
 - [ ] Add Face Flairs
-  - [ ] Color Highlight under Centre box
-  - [ ] Lines to split all sections
+  - [x] Color Highlight under Centre box
+  - [x] Lines to split all sections
   - [ ] Custom Font for Current Time
   - [x] Add end caps to progress bars
   - [ ] At night, make the top progress bar represent some status about the moon (i.e. phase, visibility, luminance)
