@@ -49,14 +49,14 @@
   - [ ] Total Number of Notifications
   - [ ] Sleep Score --> Sleep Need
   - [ ] Last Activity?
-- [ ] Add Progress Bars
+- [x] Add Progress Bars
   - [x] Sunrise, Sundown, and Sun is not up
   - [x] Intensity Minutes Progress
   - [x] Battery Life
     - [x] switch battery life bar to other side (right)
-  - [ ] Custom Bar #4
+  - [x] Custom Bar #4
     - [x] Added
-    - [ ] Allocate Feature
+    - [x] Allocate Feature: Move Bar
 - [ ] Allow changing settings
   - [ ] Configure the settings menu
 - [ ] Add Icons for Status
@@ -75,6 +75,7 @@
   - [ ] Lines to split all sections
   - [ ] Custom Font for Current Time
   - [x] Add end caps to progress bars
+  - [ ] At night, make the top progress bar represent some status about the moon (i.e. phase, visibility, luminance)
 - [ ] Face Interactions
   - [ ] Configure Long-Press Interactions
   - [ ] Configure tap interactions
