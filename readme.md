@@ -76,6 +76,7 @@
   - [ ] Custom Font for Current Time
   - [x] Add end caps to progress bars
   - [ ] At night, make the top progress bar represent some status about the moon (i.e. phase, visibility, luminance)
+  - [ ] Create Application Icon
 - [ ] Face Interactions
   - [ ] Configure Long-Press Interactions
   - [ ] Configure tap interactions
