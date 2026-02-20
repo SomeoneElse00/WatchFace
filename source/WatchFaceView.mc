@@ -582,7 +582,7 @@ class WatchFaceView extends WatchUi.WatchFace {
                 dc.drawBitmap(WIDTH*0.78, HEIGHT*0.225, bitmapSun);//must rework to fit
             }else{//next sun event is sunrise
                 //Sunrise Icon
-                bitmapSun = WatchUi.loadResource(Rez.Drawables.bitmapSunset);
+                bitmapSun = WatchUi.loadResource(Rez.Drawables.bitmapSunrise);
                 dc.drawBitmap(WIDTH*0.78, HEIGHT*0.225, bitmapSun);
             }
         } else {
@@ -611,6 +611,7 @@ class WatchFaceView extends WatchUi.WatchFace {
             );
 
             //Sunrise Icon
+            bitmapSun = WatchUi.loadResource(Rez.Drawables.bitmapSunset);
             dc.drawBitmap(WIDTH*0.78, HEIGHT*0.225, bitmapSun);
         }
 
