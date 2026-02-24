@@ -403,8 +403,8 @@ class WatchFaceView extends WatchUi.WatchFace {
             intensityGoalProgress = activityInfo.activeMinutesWeek.total*1.0/ activityInfo.activeMinutesWeekGoal;
         }
 
-        //Get Move Status
-        var moveStatus = activityInfo.moveBarLevel;
+        //Get Recovery Time
+        var recoveryTime = activityInfo.timeToRecovery;
         
 
         // ---------- Update the Watch Face ----------
@@ -651,32 +651,35 @@ class WatchFaceView extends WatchUi.WatchFace {
             ARC_WIDTH
         );
 
-        // ----- Move Bar -----
-        var colorMoveOn = Graphics.COLOR_DK_GRAY;
-        var colorMoveOff = Graphics.COLOR_DK_GRAY;
+        // ----- Recovery Time Bar -----
+        var colorRecoverRemaining = Graphics.COLOR_DK_GRAY;
+        var colorRecoveryCompleted = Graphics.COLOR_DK_GRAY;
         
-        dc.setColor(colorMoveOff, colorTransparent);
+        dc.setColor(colorRecoveryCompleted, colorTransparent);
         dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.5 - ARC_WIDTH, Graphics.ARC_CLOCKWISE, 180 + ARC_LENGTH/2, 180 - ARC_LENGTH / 2);
 
-        if (moveStatus != null){
-            if (moveStatus >= ActivityMonitor.MOVE_BAR_LEVEL_MIN && moveStatus <= 1){
-                colorMoveOn = Graphics.COLOR_DK_BLUE;
-            }else if (moveStatus <= 3) {
-                colorMoveOn = Graphics.COLOR_DK_GREEN;
-            }else if (moveStatus <= ActivityMonitor.MOVE_BAR_LEVEL_MAX){
-                colorMoveOn = Graphics.COLOR_DK_RED;
+        if (recoveryTime != null){
+            if (recoveryTime == 0){
+                colorRecoverRemaining = Graphics.COLOR_DK_GRAY;
+            }else if (recoveryTime <= 24){
+                colorRecoverRemaining = Graphics.COLOR_DK_GREEN;
+            }else if (recoveryTime <= 48) {
+                colorRecoverRemaining = Graphics.COLOR_YELLOW;
+            }else {
+                colorRecoverRemaining = Graphics.COLOR_DK_RED;
             }
-            if (moveStatus == ActivityMonitor.MOVE_BAR_LEVEL_MAX){
-                colorMoveOff = colorMoveOn;
+            if (recoveryTime >= 96){//4 days is the coded maximum of recovery time. Catch all
+                colorRecoveryCompleted = colorRecoverRemaining;
+                recoveryTime = 96;
             }
-            dc.setColor(colorMoveOn, colorTransparent);
-            if (moveStatus> 0){
-                dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.5 - ARC_WIDTH, Graphics.ARC_CLOCKWISE,  180 + ARC_LENGTH / 2 , 180 + ARC_LENGTH / 2 - ARC_LENGTH * moveStatus/ActivityMonitor.MOVE_BAR_LEVEL_MAX);
+            dc.setColor(colorRecoverRemaining, colorTransparent);
+            if (recoveryTime> 0){
+                dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.5 - ARC_WIDTH, Graphics.ARC_CLOCKWISE,  180 + ARC_LENGTH / 2 , 180 + ARC_LENGTH / 2 - ARC_LENGTH * recoveryTime/96);
             }
         }
 
         // low portion
-        dc.setColor(colorMoveOn, colorTransparent);
+        dc.setColor(colorRecoverRemaining, colorTransparent);
         dc.fillCircle(
             WIDTH * 0.5 - ARC_COS * (WIDTH*0.5 - ARC_WIDTH),
             HEIGHT * 0.5 + ARC_SIN * (HEIGHT*0.5 - ARC_WIDTH),
@@ -684,7 +687,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         );
 
         // high portion
-        dc.setColor(colorMoveOff, colorTransparent);
+        dc.setColor(colorRecoveryCompleted, colorTransparent);
         dc.fillCircle(
             WIDTH * 0.5 - ARC_COS * (WIDTH*0.5 - ARC_WIDTH),
             HEIGHT * 0.5 - ARC_SIN * (HEIGHT*0.5 - ARC_WIDTH),

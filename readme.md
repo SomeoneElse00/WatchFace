@@ -1,11 +1,11 @@
-# My Garmin Venu 3 Watch Face
+# My Garmin Forerunner 955 Watch Face
 
 [to be added]
 
 ## Dependencies
 
 - Garmin Connect IQ 8.4.0 or later
-- API level 5.2 Device or later (Garmin Venu 3)
+- API level 5.2 Device or later (Garmin Forerunner 955)
 - Java JRE 1.8.0 or later
 
 ## Compiling
@@ -44,8 +44,8 @@
   - [x] UTC Time
     - [x] Icon on UTC Time to account for time zones outside of 1hr jumps
   - [x] Body Battery
-  - [ ] Recovery Time?
-  - [ ] Current Stress Level?
+  - [x] Recovery Time?
+  - [ ] ~~Current Stress Level?~~
   - [ ] Total Number of Notifications
   - [ ] Sleep Score --> Sleep Need
   - [ ] Last Activity?
@@ -56,7 +56,7 @@
     - [x] switch battery life bar to other side (right)
   - [x] Custom Bar #4
     - [x] Added
-    - [x] Allocate Feature: Move Bar
+    - [x] Allocate Feature: ~~Move Bar~~ Recovery Time
 - [ ] Allow changing settings
   - [ ] Configure the settings menu
 - [ ] Add Icons for Status
