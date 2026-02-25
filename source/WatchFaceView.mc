@@ -406,6 +406,8 @@ class WatchFaceView extends WatchUi.WatchFace {
         //Get Recovery Time
         var recoveryTime = activityInfo.timeToRecovery;
         
+        //Get Notification Count
+        var notifs = systemSettings.notificationCount;
 
         // ---------- Update the Watch Face ----------
 
@@ -489,14 +491,17 @@ class WatchFaceView extends WatchUi.WatchFace {
             utcText.setText("");
         }
 
-        // ---------- Draw Time Background Shape ----------
-        //var colorTransparent = Graphics.COLOR_TRANSPARENT;
-        /*dc.setColor(Application.Properties.getValue("AccentTimeBGColor") as Number, colorTransparent);
-        var hOffset = 0.07;
-        var vOffset = 0.36;
-        dc.fillRectangle(WIDTH*hOffset, HEIGHT*vOffset, WIDTH*(1-hOffset*2), HEIGHT*(1-vOffset*2));
-        dc.fillEllipse(WIDTH*hOffset, HEIGHT*0.5, WIDTH*hOffset-2.5*ARC_WIDTH,HEIGHT*(1-2*vOffset)/2);
-        dc.fillEllipse(WIDTH*(1-hOffset), HEIGHT*0.5, WIDTH*hOffset-2.5*ARC_WIDTH,HEIGHT*(1-2*vOffset)/2);*/
+        // ---------- Update Notifications Info ----------
+        var fieldNotifs = View.findDrawableById("notifs") as Text;
+        fieldNotifs.setColor(Application.Properties.getValue("ForegroundColor") as Number);
+        if (!systemSettings.phoneConnected){
+            fieldNotifs.setText("");
+            //Draw phone disconnected icon in its' place          -------------------------------------------INCOMPLETE-------------------------------------------
+        }else if (notifs >= 20){
+            fieldNotifs.setText("20+");
+        }else{
+            fieldNotifs.setText(notifs.format("%d"));
+        }
 
         // ---------- Send the Updates ----------
 
