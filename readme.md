@@ -47,7 +47,7 @@
   - [x] Recovery Time?
   - [ ] ~~Current Stress Level?~~
   - [ ] Total Number of Notifications
-  - [ ] Sleep Score --> Sleep Need
+  - [x] ~~Sleep Score --> Sleep Need~~ Not exposed in Monkey C SDK
   - [ ] Last Activity?
 - [x] Add Progress Bars
   - [x] Sunrise, Sundown, and Sun is not up
