@@ -81,6 +81,9 @@
   - [ ] Configure Long-Press Interactions
   - [ ] Configure tap interactions
     - [ ] Tap weathr to toggle to feels like
+- [ ] Program Partial Updates
+  - [ ] Seconds
+  - [ ] Maybe HR, body battery, and notifications
 
 ## References
 
