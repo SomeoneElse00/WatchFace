@@ -673,13 +673,13 @@ class WatchFaceView extends WatchUi.WatchFace {
             }else {
                 colorRecoverRemaining = Graphics.COLOR_DK_RED;
             }
-            if (recoveryTime >= 96){//4 days is the coded maximum of recovery time. Catch all
+            if (recoveryTime >= 72){//4 days is the coded maximum of recovery time. Catch all
                 colorRecoveryCompleted = colorRecoverRemaining;
-                recoveryTime = 96;
+                recoveryTime = 72;
             }
             dc.setColor(colorRecoverRemaining, colorTransparent);
             if (recoveryTime> 0){
-                dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.5 - ARC_WIDTH, Graphics.ARC_CLOCKWISE,  180 + ARC_LENGTH / 2 , 180 + ARC_LENGTH / 2 - ARC_LENGTH * recoveryTime/96);
+                dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.5 - ARC_WIDTH, Graphics.ARC_CLOCKWISE,  180 + ARC_LENGTH / 2 , 180 + ARC_LENGTH / 2 - ARC_LENGTH * recoveryTime/72);
             }
         }
 
