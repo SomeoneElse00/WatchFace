@@ -50,8 +50,6 @@ class WatchFaceView extends WatchUi.WatchFace {
         oneDay = new Time.Duration(Gregorian.SECONDS_PER_DAY);
         fifteenMins = new Time.Duration(60*15);
         initCalcs = true;
-
-        dc.setClip(WIDTH*0.84, HEIGHT*0.495, WIDTH*(1-0.84-0.00000000000), HEIGHT*(1-0.495-0.00000000000000000000000000));//INCOMPLETE: Fill in 0s with the appropriate ratio to calculate the box
     }
 
     function getWeatherBitmap (condition as Weather.Condition or Null, isWeatherDay as Boolean) as WatchUi.BitmapResource {
@@ -888,6 +886,7 @@ class WatchFaceView extends WatchUi.WatchFace {
     }
 
     function onPartialUpdate(dc as Dc){
+        dc.setClip(WIDTH*0.835, HEIGHT*0.5, WIDTH*0.11, HEIGHT*0.11);
         // -----Update Seconds---------
         var fieldSecondsDigit = View.findDrawableById("seconds") as Text;
         fieldSecondsDigit.setColor(Application.Properties.getValue("TimeColor") as Number);
