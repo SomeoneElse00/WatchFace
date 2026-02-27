@@ -66,7 +66,7 @@
 - [ ] Add Icons for the Custom Fields
   - [x] Heart Rate
   - [x] Sun
-  - [ ] Weather
+  - [x] Weather
   - [x] Body Battery
   - [ ] Recovery Time?
   - [ ] Notifications Icon
