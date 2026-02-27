@@ -76,51 +76,39 @@ class WatchFaceView extends WatchUi.WatchFace {
                 return WatchUi.loadResource(Rez.Drawables.bitmapWeatherRain);
 
             case Weather.CONDITION_SNOW:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherSnow);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherSnow);
 
             case Weather.CONDITION_WINDY:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWindy);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWindy);
 
             case Weather.CONDITION_THUNDERSTORMS:
-                if (isWeatherDay) {
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
-                }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
-                }
-
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherStorm);
+                
             case Weather.CONDITION_WINTRY_MIX:
                 if (isWeatherDay) {
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWintryDay);
                 }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWintryNight);
                 }
 
             case Weather.CONDITION_FOG:
                 if (isWeatherDay) {
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherFogDay);
                 }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherFogNight);
                 }
 
             case Weather.CONDITION_HAZY:
-                if (isWeatherDay) {
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
-                }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
-                }
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHaze);
 
             case Weather.CONDITION_HAIL:
-                if (isWeatherDay) {
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
-                }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
-                }
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHail);
 
             case Weather.CONDITION_SCATTERED_SHOWERS:
                 return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
 
             case Weather.CONDITION_SCATTERED_THUNDERSTORMS:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherStorm);
 
             case Weather.CONDITION_UNKNOWN_PRECIPITATION:
                 return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
@@ -171,7 +159,7 @@ class WatchFaceView extends WatchUi.WatchFace {
                 return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
 
             case Weather.CONDITION_CHANCE_OF_THUNDERSTORMS:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherStorm);
 
             case Weather.CONDITION_MIST:
                 return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
@@ -183,28 +171,28 @@ class WatchFaceView extends WatchUi.WatchFace {
                 return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
 
             case Weather.CONDITION_TORNADO:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);
 
             case Weather.CONDITION_SMOKE:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHaze);
 
             case Weather.CONDITION_ICE:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherIce);
 
             case Weather.CONDITION_SAND:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWindSock);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWindSock);
 
             case Weather.CONDITION_SQUALL:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);
 
             case Weather.CONDITION_SANDSTORM:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);
 
             case Weather.CONDITION_VOLCANIC_ASH:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWindSock);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWindSock);
 
             case Weather.CONDITION_HAZE:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHaze);
 
             case Weather.CONDITION_FAIR:
                 if (isWeatherDay){
@@ -214,10 +202,10 @@ class WatchFaceView extends WatchUi.WatchFace {
                 }
 
             case Weather.CONDITION_HURRICANE:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);
 
             case Weather.CONDITION_TROPICAL_STORM:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);
 
             case Weather.CONDITION_CHANCE_OF_SNOW:
                 return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
@@ -278,7 +266,7 @@ class WatchFaceView extends WatchUi.WatchFace {
                 return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
 
             default:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);
 
         }
     }
