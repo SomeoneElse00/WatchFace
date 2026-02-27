@@ -298,6 +298,8 @@ class WatchFaceView extends WatchUi.WatchFace {
         }else{
             bitmapWeather = getWeatherBitmap(Weather.CONDITION_UNKNOWN, isDay);
         }
+
+        WatchUi.requestUpdate();
     }
 
     // Called when this View is removed from the screen. Save the
@@ -767,6 +769,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     // The user has just looked at their watch. Timers and animations may be started here.
     function onExitSleep() as Void {
+        WatchUi.requestUpdate();
     }
 
     // Terminate any active timers and prepare for slow updates.
@@ -892,6 +895,10 @@ class WatchFaceView extends WatchUi.WatchFace {
         fieldSecondsDigit.setColor(Application.Properties.getValue("TimeColor") as Number);
         fieldSecondsDigit.setText(System.getClockTime().sec.format("%02d"));
 
+        dc.clearClip();
+
+
+
         dc.setClip(WIDTH*0.23, HEIGHT*0.655, WIDTH*0.25, HEIGHT*0.15);
         // ---------Update Heart Rate Info---------
         var hrData = Toybox.ActivityMonitor.getHeartRateHistory(1,true).next().heartRate;
@@ -902,5 +909,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         }else{
             fieldHR.setText(hrData.format("%d"));
         }
+
+        dc.clearClip();
     }
 }
