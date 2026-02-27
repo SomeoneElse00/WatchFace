@@ -7,6 +7,6 @@
     <property id="TimeColon" type="boolean">true</property>
     <property id="ShowUTC" type="boolean">true</property>
     <property id="AccentLinesColor" type="number">0xAAAAAA</property>
-    <property id="AccentTimeBGColor" type="number">0xFFFF00</property>
+    <property id="AccentTimeBGColor" type="number">0xFFAA00</property>
     
 </properties>

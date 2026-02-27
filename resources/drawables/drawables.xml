@@ -6,6 +6,70 @@
     <bitmap id="bitmapBodyBattery" filename="garmin_body_battery.svg" scaleX="10%" scaleY="10%"/>
 
     <!-- Bitmaps for Weather -->
-    <bitmap id="bitmapWeatherSunny" filename="weather_sunny.svg" scaleX="15%" scaleY="15%"/>
-    <bitmap id="bitmapQuestion" filename="question.svg" scaleX="15%" scaleY="15%"/>
+    <bitmap id="bitmapWeatherSunny" filename="weather_sunny.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherClearNight" filename="weather_clear_night.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherPartlyDay" filename="weather_partly_day.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherPartlyNight" filename="weather_partly_night.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherWintryDay" filename="weather_wintry_day.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherWintryNight" filename="weather_wintry_night.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherCloud" filename="weather_cloud.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherRain" filename="weather_rain.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherLightRain" filename="weather_rain_light.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherHeavyRain" filename="weather_rain_heavy.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherSnow" filename="weather_snow.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherIce" filename="weather_ice.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherWindy" filename="weather_windy.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherStorm" filename="weather_storm.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherTornado" filename="weather_tornado.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherWindSock" filename="weather_windSock.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherHaze" filename="weather_haze.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherFogDay" filename="weather_fog_day.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherFogNight" filename="weather_fog_night.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherHail" filename="weather_hail.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherHailExtreme" filename="weather_hail_extreme.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapQuestion" filename="question.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
 </drawables>

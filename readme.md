@@ -1,4 +1,4 @@
-# My Garmin Venu 3 Watch Face
+# My Garmin Forerunner 955 Watch Face
 
 [to be added]
 
@@ -44,10 +44,10 @@
   - [x] UTC Time
     - [x] Icon on UTC Time to account for time zones outside of 1hr jumps
   - [x] Body Battery
-  - [ ] Recovery Time?
-  - [ ] Current Stress Level?
+  - [x] Recovery Time?
+  - [ ] ~~Current Stress Level?~~
   - [ ] Total Number of Notifications
-  - [ ] Sleep Score --> Sleep Need
+  - [x] ~~Sleep Score --> Sleep Need~~ Not exposed in Monkey C SDK
   - [ ] Last Activity?
 - [x] Add Progress Bars
   - [x] Sunrise, Sundown, and Sun is not up
@@ -56,7 +56,7 @@
     - [x] switch battery life bar to other side (right)
   - [x] Custom Bar #4
     - [x] Added
-    - [x] Allocate Feature: Move Bar
+    - [x] Allocate Feature: ~~Move Bar~~ Recovery Time
 - [ ] Allow changing settings
   - [ ] Configure the settings menu
 - [ ] Add Icons for Status
@@ -66,7 +66,7 @@
 - [ ] Add Icons for the Custom Fields
   - [x] Heart Rate
   - [x] Sun
-  - [ ] Weather
+  - [x] Weather
   - [x] Body Battery
   - [ ] Recovery Time?
   - [ ] Notifications Icon
@@ -81,6 +81,9 @@
   - [ ] Configure Long-Press Interactions
   - [ ] Configure tap interactions
     - [ ] Tap weathr to toggle to feels like
+- [ ] Program Partial Updates
+  - [ ] Seconds
+  - [ ] Maybe HR, body battery, and notifications
 
 ## References
 

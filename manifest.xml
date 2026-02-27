@@ -12,7 +12,6 @@
         <iq:products>
             <iq:product id="fenix7pronowifi"/>
             <iq:product id="fr955"/>
-            <iq:product id="venu3"/>
         </iq:products>
         <!-- Use "Monkey C: Edit Permissions" from the Visual Studio Code command
             palette to update permissions. -->
