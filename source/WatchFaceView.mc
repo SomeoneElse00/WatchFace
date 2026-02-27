@@ -887,9 +887,20 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     function onPartialUpdate(dc as Dc){
         dc.setClip(WIDTH*0.835, HEIGHT*0.5, WIDTH*0.11, HEIGHT*0.11);
-        // -----Update Seconds---------
+        // ---------Update Seconds---------
         var fieldSecondsDigit = View.findDrawableById("seconds") as Text;
         fieldSecondsDigit.setColor(Application.Properties.getValue("TimeColor") as Number);
         fieldSecondsDigit.setText(System.getClockTime().sec.format("%02d"));
+
+        dc.setClip(WIDTH*0.23, HEIGHT*0.655, WIDTH*0.25, HEIGHT*0.15);
+        // ---------Update Heart Rate Info---------
+        var hrData = Toybox.ActivityMonitor.getHeartRateHistory(1,true).next().heartRate;
+        var fieldHR = View.findDrawableById("heartRate") as Text;
+        fieldHR.setColor(Application.Properties.getValue("ForegroundColor") as Number);
+        if (hrData == null or hrData == ActivityMonitor.INVALID_HR_SAMPLE){
+            fieldHR.setText("--");
+        }else{
+            fieldHR.setText(hrData.format("%d"));
+        }
     }
 }
