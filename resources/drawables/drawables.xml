@@ -30,6 +30,12 @@
     <bitmap id="bitmapWeatherRain" filename="weather_rain.svg" scaleX="18%" scaleY="18%">
         <palette><color>AAAAAA</color></palette>
     </bitmap>
+    <bitmap id="bitmapWeatherLightRain" filename="weather_rain_light.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherHeavyRain" filename="weather_rain_heavy.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
     <bitmap id="bitmapWeatherSnow" filename="weather_snow.svg" scaleX="18%" scaleY="18%">
         <palette><color>AAAAAA</color></palette>
     </bitmap>
@@ -58,6 +64,9 @@
         <palette><color>AAAAAA</color></palette>
     </bitmap>
     <bitmap id="bitmapWeatherHail" filename="weather_hail.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherHailExtreme" filename="weather_hail_extreme.svg" scaleX="18%" scaleY="18%">
         <palette><color>AAAAAA</color></palette>
     </bitmap>
     <bitmap id="bitmapQuestion" filename="question.svg" scaleX="18%" scaleY="18%">
