@@ -3,7 +3,7 @@
     <label id="TimeLabel" x="center" y="center" font="Graphics.FONT_SYSTEM_NUMBER_HOT" justification="Graphics.TEXT_JUSTIFY_CENTER" color="Graphics.COLOR_BLUE" />
     <label id="dateString" x="center" y="5.75%" font="Graphics.FONT_MEDIUM" justification="Graphics.TEXT_JUSTIFY_CENTER" color="Graphics.COLOR_PURPLE"/>
     <label id="seconds" x="84%" y="49.5%" font="Graphics.FONT_SMALL" justification="Graphics.TEXT_JUSTIFY_LEFT" color="Graphics.COLOR_RED"/>
-    <label id="utc" x="14%" y="40%" font="Graphics.FONT_TINY" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_PINK"/>
+    <label id="utc" x="17%" y="40%" font="Graphics.FONT_TINY" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_PINK"/>
     <label id="newfoundland" x="14%" y="50%" font="Graphics.FONT_TINY" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_GREEN"/>
 
     <!-- Weather -->

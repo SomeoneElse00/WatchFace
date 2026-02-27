@@ -9,6 +9,36 @@
     <bitmap id="bitmapWeatherSunny" filename="weather_sunny.svg" scaleX="18%" scaleY="18%">
         <palette><color>AAAAAA</color></palette>
     </bitmap>
+    <bitmap id="bitmapWeatherClearNight" filename="weather_clear_night.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherPartlyDay" filename="weather_partly_day.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherPartlyNight" filename="weather_partly_night.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherCloud" filename="weather_cloud.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherRain" filename="weather_rain.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherSnow" filename="weather_snow.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherWindy" filename="weather_windy.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+
+
+
+    <bitmap id="bitmapWeatherTornado" filename="weather_tornado.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapWeatherWindSock" filename="weather_windSock.svg" scaleX="18%" scaleY="18%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
     <bitmap id="bitmapQuestion" filename="question.svg" scaleX="18%" scaleY="18%">
         <palette><color>AAAAAA</color></palette>
     </bitmap>

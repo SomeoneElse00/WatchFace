@@ -53,36 +53,33 @@ class WatchFaceView extends WatchUi.WatchFace {
     }
 
     function getWeatherBitmap (condition as Weather.Condition or Null, isWeatherDay as Boolean) as WatchUi.BitmapResource {
+        //var wr = Weather.getCurrentConditions().precipitationChance;
         switch (condition) {
             case Weather.CONDITION_CLEAR:
                 if (isWeatherDay){
                     return WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);
                 }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned - pull current moon phase?
+                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherClearNight);
                 }
 
             case Weather.CONDITION_PARTLY_CLOUDY:
                 if (isWeatherDay){
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherPartlyDay);
                 }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherPartlyNight);
                 }
 
             case Weather.CONDITION_MOSTLY_CLOUDY:
-                if (isWeatherDay){
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
-                }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
-                }
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherCloud);
 
             case Weather.CONDITION_RAIN:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherRain);
 
             case Weather.CONDITION_SNOW:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherSnow);//unassigned
 
             case Weather.CONDITION_WINDY:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWindy);//unassigned
 
             case Weather.CONDITION_THUNDERSTORMS:
                 if (isWeatherDay) {
@@ -168,6 +165,9 @@ class WatchFaceView extends WatchUi.WatchFace {
                 return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
 
             case Weather.CONDITION_CHANCE_OF_SHOWERS:
+                /*if (Weather.getCurrentConditions().precipitationChance > 40){
+                    return getWeatherBitmap (Weather.condition, isWeatherDay); 
+                }*/
                 return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
 
             case Weather.CONDITION_CHANCE_OF_THUNDERSTORMS:
@@ -192,28 +192,32 @@ class WatchFaceView extends WatchUi.WatchFace {
                 return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
 
             case Weather.CONDITION_SAND:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWindSock);//unassigned
 
             case Weather.CONDITION_SQUALL:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);//unassigned
 
             case Weather.CONDITION_SANDSTORM:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);//unassigned
 
             case Weather.CONDITION_VOLCANIC_ASH:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWindSock);//unassigned
 
             case Weather.CONDITION_HAZE:
                 return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
 
             case Weather.CONDITION_FAIR:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                if (isWeatherDay){
+                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);
+                }else{
+                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherClearNight);
+                }
 
             case Weather.CONDITION_HURRICANE:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);//unassigned
 
             case Weather.CONDITION_TROPICAL_STORM:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);//unassigned
 
             case Weather.CONDITION_CHANCE_OF_SNOW:
                 return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
@@ -589,11 +593,11 @@ class WatchFaceView extends WatchUi.WatchFace {
             if (nextSun[0] == null){
                 //next sun event is unknown
                 bitmapSun = WatchUi.loadResource(Rez.Drawables.bitmapSunrise); //unassigned
-                dc.drawBitmap(WIDTH*0.78, HEIGHT*0.225, bitmapSun);//must rework to fit
+                dc.drawBitmap(WIDTH*0.8, HEIGHT*0.225, bitmapSun);//must rework to fit
             }else{//next sun event is sunrise
                 //Sunrise Icon
                 bitmapSun = WatchUi.loadResource(Rez.Drawables.bitmapSunrise);
-                dc.drawBitmap(WIDTH*0.78, HEIGHT*0.225, bitmapSun);
+                dc.drawBitmap(WIDTH*0.8, HEIGHT*0.225, bitmapSun);
             }
         } else {
             //next sun event is sunset
@@ -622,7 +626,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
             //Sunrise Icon
             bitmapSun = WatchUi.loadResource(Rez.Drawables.bitmapSunset);
-            dc.drawBitmap(WIDTH*0.78, HEIGHT*0.225, bitmapSun);
+            dc.drawBitmap(WIDTH*0.8, HEIGHT*0.225, bitmapSun);
         }
 
         // ----- Active Hours Bar -----
@@ -750,7 +754,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         // ---------- Draw Shapes ----------
         if (bitmapWeather != null){
-            dc.drawBitmap(WIDTH*0.06, HEIGHT*0.19, bitmapWeather); 
+            dc.drawBitmap(WIDTH*0.06, HEIGHT*0.20, bitmapWeather); 
         }
         //dc.drawBitmap(WIDTH*??, HEIGHT*??, bitmapSun); //Drawn Earlier. Icon Top Right
         dc.drawBitmap(WIDTH*0.12, HEIGHT*0.665, bitmapHR); //Icon Bottom Left
