@@ -78,6 +78,7 @@
   - [ ] At night, make the top progress bar represent some status about the moon (i.e. phase, visibility, luminance)
   - [ ] Create Application Icon
   - [ ] Rearrange Fields as Necessary
+  - [ ] Change weather behavior to update when moving from low to high power
 - [ ] Face Interactions
   - [ ] Configure Long-Press Interactions
   - [ ] Configure tap interactions
