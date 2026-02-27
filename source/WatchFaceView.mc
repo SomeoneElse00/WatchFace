@@ -216,31 +216,28 @@ class WatchFaceView extends WatchUi.WatchFace {
                 return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);
 
             case Weather.CONDITION_CHANCE_OF_SNOW:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHail);
 
             case Weather.CONDITION_CHANCE_OF_RAIN_SNOW:
-                return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHail);
 
             case Weather.CONDITION_CLOUDY_CHANCE_OF_RAIN:
-                if (isWeatherDay) {
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
-                }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
-                }
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherRain);
 
             case Weather.CONDITION_CLOUDY_CHANCE_OF_SNOW:
                 if (isWeatherDay) {
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWintryDay);
                 }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
+                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWintryNight);
                 }
 
             case Weather.CONDITION_CLOUDY_CHANCE_OF_RAIN_SNOW:
-                if (isWeatherDay) {
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHail);
+                /*if (isWeatherDay) {
                     return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
                 }else{
                     return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
-                }
+                }*/
 
             case Weather.CONDITION_FLURRIES:
                 if (isWeatherDay) {
@@ -580,7 +577,7 @@ class WatchFaceView extends WatchUi.WatchFace {
             );
             if (nextSun[0] == null){
                 //next sun event is unknown
-                bitmapSun = WatchUi.loadResource(Rez.Drawables.bitmapSunrise); //unassigned
+                bitmapSun = WatchUi.loadResource(Rez.Drawables.bitmapSunrise);
                 dc.drawBitmap(WIDTH*0.8, HEIGHT*0.225, bitmapSun);//must rework to fit
             }else{//next sun event is sunrise
                 //Sunrise Icon
