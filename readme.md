@@ -5,7 +5,7 @@
 ## Dependencies
 
 - Garmin Connect IQ 8.4.0 or later
-- API level 5.2 Device or later (Garmin Forerunner 955)
+- API level 5.2 Device or later (~~Garmin Venu 3~~ Garmin Forerunner 955)
 - Java JRE 1.8.0 or later
 
 ## Compiling
