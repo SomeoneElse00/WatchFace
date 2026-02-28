@@ -889,17 +889,21 @@ class WatchFaceView extends WatchUi.WatchFace {
     }
 
     function onPartialUpdate(dc as Dc){
+        dc.setColor(Application.Properties.getValue("TimeColor") as Number, Application.Properties.getValue("AccentTimeBGColor") as Number);
         dc.setClip(WIDTH*0.835, HEIGHT*0.5, WIDTH*0.11, HEIGHT*0.11);
+        dc.clear();
+        //dc.drawRectangle(WIDTH*0.835, HEIGHT*0.5, WIDTH*0.11, HEIGHT*0.11);
         // ---------Update Seconds---------
         var fieldSecondsDigit = View.findDrawableById("seconds") as Text;
         fieldSecondsDigit.setColor(Application.Properties.getValue("TimeColor") as Number);
         fieldSecondsDigit.setText(System.getClockTime().sec.format("%02d"));
-
+        fieldSecondsDigit.draw(dc);
         dc.clearClip();
 
 
-
+        dc.setColor(Application.Properties.getValue("ForegroundColor") as Number, Application.Properties.getValue("BackgroundColor") as Number);
         dc.setClip(WIDTH*0.23, HEIGHT*0.655, WIDTH*0.25, HEIGHT*0.15);
+        dc.clear();
         // ---------Update Heart Rate Info---------
         var hrData = Toybox.ActivityMonitor.getHeartRateHistory(1,true).next().heartRate;
         var fieldHR = View.findDrawableById("heartRate") as Text;
@@ -909,7 +913,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         }else{
             fieldHR.setText(hrData.format("%d"));
         }
-
+        fieldHR.draw(dc);
         dc.clearClip();
     }
 }

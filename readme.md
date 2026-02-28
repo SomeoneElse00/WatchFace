@@ -79,6 +79,9 @@
   - [ ] Create Application Icon
   - [ ] Rearrange Fields as Necessary
   - [ ] Change weather behavior to update when moving from low to high power
+  - [ ] Add Logic to choose between two hr gathering methods. Break HR gathering to seperate fn.
+    - [ ] Activity.getActivityInfo().currentHeartRate
+    - [ ] ActivityMonitor.getHeartRateHistory(1,true).next().heartRate
 - [ ] Face Interactions
   - [ ] Configure Long-Press Interactions
   - [ ] Configure tap interactions
