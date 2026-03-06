@@ -43,7 +43,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         WIDTH = dc.getWidth();
         HEIGHT = dc.getHeight();
-        ARC_WIDTH = HEIGHT/55; //scaling goal is for a 454 pixel display to have a width of approximateley 8.
+        ARC_WIDTH = HEIGHT/75 + 58.5/(HEIGHT/55+14);//caling goal is for a 454 pixel display to have a width of approximateley 8, and for a 220 pixel display to have a width of approximateley 6
         ARC_LENGTH = 70;
         ARC_SIN = Math.sin(Math.toRadians((ARC_LENGTH+5)/2));
         ARC_COS = Math.cos(Math.toRadians((ARC_LENGTH+5)/2));
