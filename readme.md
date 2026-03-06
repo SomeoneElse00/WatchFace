@@ -60,6 +60,7 @@
 - [ ] Allow changing settings
   - [ ] Configure the settings menu
 - [ ] Add Icons for Status
+  - [ ] Rearrange Layout for better placement
   - [ ] Bluetooth Disconnected
   - [ ] Alarm is Set
   - [ ] Do Not Disturb is On
@@ -73,12 +74,16 @@
 - [ ] Add Face Flairs
   - [x] Color Highlight under Centre box
   - [x] Lines to split all sections
-  - [ ] Custom Font for Current Time
+  - [x] ~~Custom Font for Current Time~~ <-- I'm happy with the font
   - [x] Add end caps to progress bars
   - [ ] At night, make the top progress bar represent some status about the moon (i.e. phase, visibility, luminance)
   - [ ] Create Application Icon
   - [ ] Rearrange Fields as Necessary
   - [ ] Change weather behavior to update when moving from low to high power
+  - [ ] Add Logic to choose between two hr gathering methods. Break HR gathering to seperate fn.
+    - [ ] Activity.getActivityInfo().currentHeartRate
+    - [ ] ActivityMonitor.getHeartRateHistory(1,true).next().heartRate
+  - [ ] Add caching for GPS Location
 - [ ] Face Interactions
   - [ ] Configure Long-Press Interactions
   - [ ] Configure tap interactions

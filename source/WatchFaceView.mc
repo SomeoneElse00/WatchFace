@@ -43,7 +43,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         WIDTH = dc.getWidth();
         HEIGHT = dc.getHeight();
-        ARC_WIDTH = HEIGHT/55; //scaling goal is for a 454 pixel display to have a width of approximateley 8.
+        ARC_WIDTH = HEIGHT/75 + 58.5/(HEIGHT/55+14);//caling goal is for a 454 pixel display to have a width of approximateley 8, and for a 220 pixel display to have a width of approximateley 6
         ARC_LENGTH = 70;
         ARC_SIN = Math.sin(Math.toRadians((ARC_LENGTH+5)/2));
         ARC_COS = Math.cos(Math.toRadians((ARC_LENGTH+5)/2));
@@ -283,12 +283,12 @@ class WatchFaceView extends WatchUi.WatchFace {
         bitmapBodyBattery = WatchUi.loadResource(Rez.Drawables.bitmapBodyBattery);
 
         // Get relative sun
-        var isDay = true;
+        var isDay = false;
         var rise = Weather.getSunrise(Position.getInfo().position, Time.now());
         var fall = Weather.getSunset(Position.getInfo().position, Time.now());
         if (rise != null && fall != null) {
             if (rise.value() < Time.now().value() || fall.value() > Time.now().value()) {
-                isDay = false;
+                isDay = true;
             }
         }
 
@@ -674,8 +674,10 @@ class WatchFaceView extends WatchUi.WatchFace {
                 recoveryTime = 72;
             }
             dc.setColor(colorRecoverRemaining, colorTransparent);
-            if (recoveryTime> 0){
-                dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.5 - ARC_WIDTH, Graphics.ARC_CLOCKWISE,  180 + ARC_LENGTH / 2 , 180 + ARC_LENGTH / 2 - ARC_LENGTH * recoveryTime/72);
+            var degRemaining = 180 + ARC_LENGTH / 2 - ARC_LENGTH * recoveryTime/72;
+            var degInit = 180 + ARC_LENGTH / 2;
+            if (degRemaining<degInit){
+                dc.drawArc(WIDTH/2, HEIGHT/2, HEIGHT*0.5 - ARC_WIDTH, Graphics.ARC_CLOCKWISE,  degInit , degRemaining);
             }
         }
 
@@ -889,17 +891,21 @@ class WatchFaceView extends WatchUi.WatchFace {
     }
 
     function onPartialUpdate(dc as Dc){
+        dc.setColor(Application.Properties.getValue("TimeColor") as Number, Application.Properties.getValue("AccentTimeBGColor") as Number);
         dc.setClip(WIDTH*0.835, HEIGHT*0.5, WIDTH*0.11, HEIGHT*0.11);
+        dc.clear();
+        //dc.drawRectangle(WIDTH*0.835, HEIGHT*0.5, WIDTH*0.11, HEIGHT*0.11);
         // ---------Update Seconds---------
         var fieldSecondsDigit = View.findDrawableById("seconds") as Text;
         fieldSecondsDigit.setColor(Application.Properties.getValue("TimeColor") as Number);
         fieldSecondsDigit.setText(System.getClockTime().sec.format("%02d"));
-
+        fieldSecondsDigit.draw(dc);
         dc.clearClip();
 
 
-
+        dc.setColor(Application.Properties.getValue("ForegroundColor") as Number, Application.Properties.getValue("BackgroundColor") as Number);
         dc.setClip(WIDTH*0.23, HEIGHT*0.655, WIDTH*0.25, HEIGHT*0.15);
+        dc.clear();
         // ---------Update Heart Rate Info---------
         var hrData = Toybox.ActivityMonitor.getHeartRateHistory(1,true).next().heartRate;
         var fieldHR = View.findDrawableById("heartRate") as Text;
@@ -909,7 +915,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         }else{
             fieldHR.setText(hrData.format("%d"));
         }
-
+        fieldHR.draw(dc);
         dc.clearClip();
     }
 }
