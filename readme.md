@@ -30,33 +30,8 @@
 
 ## Dev List
 
-- [x] Set up Face
-  - [x] Add Time
-  - [x] Add Seconds
-  - [x] Add Leading 0 Support
-  - [x] Add Remove Colon Support
-  - [x] Manage Colors through settings, use manually set for now
 - [x] Add Fields
-  - [x] Heart Rate
-  - [x] Sunrise and Sundown in same field
-  - [x] Current Weather
-  - [x] Weekday and Date
-  - [x] UTC Time
-    - [x] Icon on UTC Time to account for time zones outside of 1hr jumps
-  - [x] Body Battery
-  - [x] Recovery Time?
-  - [ ] ~~Current Stress Level?~~
-  - [x] Total Number of Notifications
-  - [x] ~~Sleep Score --> Sleep Need~~ Not exposed in Monkey C SDK
   - [ ] [?????] Last Activity?
-- [x] Add Progress Bars
-  - [x] Sunrise, Sundown, and Sun is not up
-  - [x] Intensity Minutes Progress
-  - [x] Battery Life
-    - [x] switch battery life bar to other side (right)
-  - [x] Custom Bar #4
-    - [x] Added
-    - [x] Allocate Feature: ~~Move Bar~~ Recovery Time
 - [ ] Allow changing settings
   - [ ] Configure the settings menu
 - [ ] Add Icons for Status
