@@ -283,12 +283,12 @@ class WatchFaceView extends WatchUi.WatchFace {
         bitmapBodyBattery = WatchUi.loadResource(Rez.Drawables.bitmapBodyBattery);
 
         // Get relative sun
-        var isDay = true;
+        var isDay = false;
         var rise = Weather.getSunrise(Position.getInfo().position, Time.now());
         var fall = Weather.getSunset(Position.getInfo().position, Time.now());
         if (rise != null && fall != null) {
             if (rise.value() < Time.now().value() || fall.value() > Time.now().value()) {
-                isDay = false;
+                isDay = true;
             }
         }
 
