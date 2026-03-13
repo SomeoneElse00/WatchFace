@@ -1,9 +1,21 @@
 <drawables xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
     <bitmap id="LauncherIcon" filename="launcher_icon.svg" dithering="none" />
     <bitmap id="bitmapHR" filename="heart.svg" scaleX="11%" scaleY="11%"/>
-    <bitmap id="bitmapSunrise" filename="up_arrow.svg" scaleX="10%" scaleY="10%"/>
-    <bitmap id="bitmapSunset" filename="down_arrow.svg" scaleX="10%" scaleY="10%"/>
     <bitmap id="bitmapBodyBattery" filename="garmin_body_battery.svg" scaleX="10%" scaleY="10%"/>
+
+    <!-- Bitmaps for NotificatioN Status-->
+    <bitmap id="bitmapDisconnected" filename="phone_disconnected.svg" scaleX="10%" scaleY="10%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapNotif" filename="notif.svg" scaleX="9.5%" scaleY="9.5%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapNotifDND" filename="notif_DND.svg" scaleX="9.5%" scaleY="9.5%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
+    <bitmap id="bitmapNotifAlarm" filename="notif_alarm.svg" scaleX="9.5%" scaleY="9.5%">
+        <palette><color>AAAAAA</color></palette>
+    </bitmap>
 
     <!-- Bitmaps for Weather -->
     <bitmap id="bitmapWeatherSunny" filename="weather_sunny.svg" scaleX="18%" scaleY="18%">

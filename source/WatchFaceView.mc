@@ -12,7 +12,6 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     // ----- Bitmap References -----
     var bitmapHR;
-    var bitmapSun;
     var bitmapBodyBattery;
     var bitmapWeather;
 
@@ -492,7 +491,6 @@ class WatchFaceView extends WatchUi.WatchFace {
         fieldNotifs.setColor(Application.Properties.getValue("ForegroundColor") as Number);
         if (!systemSettings.phoneConnected){
             fieldNotifs.setText("");
-            //Draw phone disconnected icon in its' place          -------------------------------------------INCOMPLETE-------------------------------------------
         }else if (notifs >= 20){
             fieldNotifs.setText("20+");
         }else{
@@ -577,15 +575,6 @@ class WatchFaceView extends WatchUi.WatchFace {
                 HEIGHT * 0.5 - ARC_COS * (HEIGHT*0.5 - ARC_WIDTH),
                 ARC_WIDTH
             );
-            if (nextSun[0] == null){
-                //next sun event is unknown
-                bitmapSun = WatchUi.loadResource(Rez.Drawables.bitmapSunrise);
-                dc.drawBitmap(WIDTH*0.8, HEIGHT*0.225, bitmapSun);//must rework to fit
-            }else{//next sun event is sunrise
-                //Sunrise Icon
-                bitmapSun = WatchUi.loadResource(Rez.Drawables.bitmapSunrise);
-                dc.drawBitmap(WIDTH*0.8, HEIGHT*0.225, bitmapSun);
-            }
         } else {
             //next sun event is sunset
             var percentDaylight = now.subtract(todaySunRise).value()*1.0 / todaySunSet.subtract(todaySunRise).value();
@@ -610,10 +599,6 @@ class WatchFaceView extends WatchUi.WatchFace {
                 HEIGHT * 0.5 - ARC_COS * (HEIGHT*0.5 - ARC_WIDTH),
                 ARC_WIDTH
             );
-
-            //Sunrise Icon
-            bitmapSun = WatchUi.loadResource(Rez.Drawables.bitmapSunset);
-            dc.drawBitmap(WIDTH*0.8, HEIGHT*0.225, bitmapSun);
         }
 
         // ----- Active Hours Bar -----
@@ -742,24 +727,42 @@ class WatchFaceView extends WatchUi.WatchFace {
         );
 
         // ---------- Draw Shapes ----------
+        //Icon Top Left
         if (bitmapWeather != null){
-            dc.drawBitmap(WIDTH*0.06, HEIGHT*0.20, bitmapWeather); 
+            dc.drawScaledBitmap(WIDTH*0.08, HEIGHT*0.21, WIDTH*0.16, HEIGHT*0.16, bitmapWeather);
         }
-        //dc.drawBitmap(WIDTH*??, HEIGHT*??, bitmapSun); //Drawn Earlier. Icon Top Right
         dc.drawBitmap(WIDTH*0.12, HEIGHT*0.665, bitmapHR); //Icon Bottom Left
         dc.drawBitmap(WIDTH*0.78, HEIGHT*0.673, bitmapBodyBattery); //Icon Bottom Right
+
+        //Icon Top Right
+        var bitmapNotif = WatchUi.loadResource(Rez.Drawables.bitmapNotif);
+        dc.drawBitmap(WIDTH*0.78, HEIGHT*0.235, bitmapNotif);
+        if (systemSettings has :doNotDisturb && systemSettings.doNotDisturb){
+            var bitmapNotifDND = WatchUi.loadResource(Rez.Drawables.bitmapNotifDND);
+            dc.drawBitmap(WIDTH*0.78, HEIGHT*0.235, bitmapNotifDND);
+        }
+        if (systemSettings.alarmCount > 0){
+            var bitmapAlarm = WatchUi.loadResource(Rez.Drawables.bitmapNotifAlarm);
+            dc.drawBitmap(WIDTH*0.78, HEIGHT*0.235, bitmapAlarm);
+        }
+
+        // ---------- Draw Phone Disconnected Icon ----------
+        if (!systemSettings.phoneConnected){
+            var bitmapDisconnected = WatchUi.loadResource(Rez.Drawables.bitmapDisconnected);
+            dc.drawBitmap(WIDTH*0.595, HEIGHT*0.235, bitmapDisconnected);//must rework to fit
+        }
 
         // ---------- Draw Border Lines ----------
         dc.setPenWidth(1);
         dc.setColor(Application.Properties.getValue("AccentLinesColor") as Number, colorTransparent);
-        dc.drawLine(WIDTH*0.17, HEIGHT*0.19, 
-                    WIDTH*0.83, HEIGHT*0.19);//Top divider line
-        dc.drawLine(WIDTH*0.17, HEIGHT*0.81, 
-                    WIDTH*0.83, HEIGHT*0.81);//bottom divider line
-        dc.drawLine(WIDTH*0.5, HEIGHT*0.22,
-                    WIDTH*0.5, HEIGHT*0.33);//Top centre line
-        dc.drawLine(WIDTH*0.5, HEIGHT*0.78,
-                    WIDTH*0.5, HEIGHT*0.67);//bottom centre line
+        dc.drawLine(WIDTH*0.17, HEIGHT*0.20, 
+                    WIDTH*0.83, HEIGHT*0.20);//Top horizontal line
+        dc.drawLine(WIDTH*0.17, HEIGHT*0.80, 
+                    WIDTH*0.83, HEIGHT*0.80);//bottom horizontal line
+        dc.drawLine(WIDTH*0.5, HEIGHT*0.23,
+                    WIDTH*0.5, HEIGHT*0.33);//Top vertical line
+        dc.drawLine(WIDTH*0.5, HEIGHT*0.77,
+                    WIDTH*0.5, HEIGHT*0.67);//bottom vertical line
 
         // ---------- Dev Tools ----------
         //drawReferenceLines(dc);
