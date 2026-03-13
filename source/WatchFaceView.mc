@@ -286,7 +286,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         var rise = Weather.getSunrise(Position.getInfo().position, Time.now());
         var fall = Weather.getSunset(Position.getInfo().position, Time.now());
         if (rise != null && fall != null) {
-            if (rise.value() < Time.now().value() || fall.value() > Time.now().value()) {
+            if (rise.value() < Time.now().value() && fall.value() > Time.now().value()) {
                 isDay = true;
             }
         }
