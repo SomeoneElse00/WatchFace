@@ -39,13 +39,13 @@
   - [ ] Bluetooth Disconnected
   - [ ] Alarm is Set
   - [ ] Do Not Disturb is On
-- [ ] Add Icons for the Custom Fields
+- [X] Add Icons for the Custom Fields
   - [x] Heart Rate
   - [x] Sun
   - [x] Weather
   - [x] Body Battery
-  - [ ] Recovery Time?
-  - [ ] Notifications Icon
+  - [x] ~~Recovery Time?~~ Added Progress Bar
+  - [x] Notifications Icon
 - [ ] Add Face Flairs
   - [x] Color Highlight under Centre box
   - [x] Lines to split all sections
@@ -53,7 +53,7 @@
   - [x] Add end caps to progress bars
   - [ ] At night, make the top progress bar represent some status about the moon (i.e. phase, visibility, luminance)
   - [ ] Create Application Icon
-  - [ ] Rearrange Fields as Necessary
+  - [x] Rearrange Fields as Necessary
   - [ ] Change weather behavior to update when moving from low to high power
   - [ ] Add Logic to choose between two hr gathering methods. Break HR gathering to seperate fn.
     - [ ] Activity.getActivityInfo().currentHeartRate
@@ -73,4 +73,4 @@
 
 I used and referenced code from this [medium article by Eric](https://medium.com/@ericbt/design-your-own-garmin-watch-face-21d004d38f99) as a starting and jumping-off point. The final product of his work is available on [GitHub](https://github.com/briquet9/garmin-watch-faces/tree/main) under an [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0.txt). Code was also referenced from this [Garmin Forum article](https://forums.garmin.com/developer/connect-iq/f/discussion/349473/simple-example-wf-that-shows-a-bunch-of-things) showing an example of many advanced features in Monkey C. I referenced code in this app to build my settings menu using `Menu2`.  
 
-Generative AI was used in this project to assist with debugging and researching through the API and web for my approach for completing a given task. All code included in this project that was written by me is not a direct output of a Generative AI model, nor does it include minor tweaks (i.e. changing variable names) to not be contradictory to the previous claim. All ideas on the watch face's design are my own.  
+Generative AI was used in this project to assist with debugging and researching through the API and web for my approach for completing a given task. All code included in this project is not a direct output of a Generative AI model, nor does it include minor tweaks (i.e. changing variable names) to not be contradictory to the previous claim. All ideas on the watch face's design are my own.  
