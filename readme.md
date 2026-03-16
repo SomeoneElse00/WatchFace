@@ -34,11 +34,11 @@
   - [ ] [?????] Last Activity?
 - [ ] Allow changing settings
   - [ ] Configure the settings menu
-- [ ] Add Icons for Status
-  - [ ] Rearrange Layout for better placement
-  - [ ] Bluetooth Disconnected
-  - [ ] Alarm is Set
-  - [ ] Do Not Disturb is On
+- [x] Add Icons for Status
+  - [x] Rearrange Layout for better placement
+  - [x] Bluetooth Disconnected
+  - [x] Alarm is Set
+  - [x] Do Not Disturb is On
 - [X] Add Icons for the Custom Fields
   - [x] Heart Rate
   - [x] Sun
