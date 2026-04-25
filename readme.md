@@ -1,7 +1,5 @@
 # My Garmin Forerunner 955 Watch Face
 
-[to be added]
-
 ## Dependencies
 
 - Garmin Connect IQ 8.4.0 or later
