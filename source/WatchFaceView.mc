@@ -331,7 +331,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         var dayInfo = Gregorian.info(now, Time.FORMAT_MEDIUM);
 
         // Get Heart Rate Info
-        var hrData = Toybox.ActivityMonitor.getHeartRateHistory(1,true).next().heartRate;
+        var hrData = Toybox.ActivityMonitor.getHeartRateHistory(null,true).next().heartRate;
 
         // Get Sun Status (Sunrise or Sundown, whichever is next)
         var todaySunRise = Weather.getSunrise(currentLocation.position, now);
@@ -818,7 +818,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
 
         dc.setColor(Application.Properties.getValue("ForegroundColor") as Number, Application.Properties.getValue("BackgroundColor") as Number);
-        dc.setClip(WIDTH*0.23, HEIGHT*0.655, WIDTH*0.25, HEIGHT*0.15);
+        dc.setClip(WIDTH*0.23, HEIGHT*0.655, WIDTH*0.25, HEIGHT*0.14);
         dc.clear();
         // ---------Update Heart Rate Info---------
         var hrData = Toybox.ActivityMonitor.getHeartRateHistory(1,true).next().heartRate;
@@ -833,7 +833,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         dc.clearClip();
     }
 
-
+    
     // DEV
     function drawReferenceLines(dc as Dc) as Void {
         var WIDTH = dc.getWidth();
