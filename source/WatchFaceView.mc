@@ -283,8 +283,14 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         // Get relative sun
         var isDay = false;
-        var rise = Weather.getSunrise(Position.getInfo().position, Time.now());
-        var fall = Weather.getSunset(Position.getInfo().position, Time.now());
+        var currentLoc = Position.getInfo();
+        var rise = null;
+        var fall = null;
+        if (currentLoc != null && currentLoc.position != null){
+            rise = Weather.getSunrise(currentLoc.position, Time.now());
+            fall = Weather.getSunset(currentLoc.position, Time.now());
+        }
+        
         if (rise != null && fall != null) {
             if (rise.value() < Time.now().value() && fall.value() > Time.now().value()) {
                 isDay = true;
@@ -333,9 +339,28 @@ class WatchFaceView extends WatchUi.WatchFace {
         // Get Heart Rate Info
         var hrData = Toybox.ActivityMonitor.getHeartRateHistory(null,true).next().heartRate;
 
+        // Confirm position for Sunrise Calculation exists, or pull from memory
+        //using Toybox.Application.Storage;
+        // CANNOT STORE LOCATION.POSITION: STORE AS INDIVIDUAL NUMBERS, AND KEEP A BOOLEAN TO TRACK SETUP.
+        var cachePosition = Storage.getValue("cachePosition");
+
+        if ((currentLocation == null || currentLocation.position == null) && cachePosition != null) {
+            currentLocation = cachePosition;
+        } else {
+            if ((cachePosition == null || currentLocation.position != cachePosition) && currentLocation.position != null) {
+                Storage.setValue("cachePosition", currentLocation.position);
+            }
+            currentLocation = currentLocation.position;
+        }
+
+
         // Get Sun Status (Sunrise or Sundown, whichever is next)
-        var todaySunRise = Weather.getSunrise(currentLocation.position, now);
-        var todaySunSet = Weather.getSunset(currentLocation.position, now);
+        var todaySunRise = null;
+        var todaySunSet = null;
+        if (currentLocation != null) {
+            todaySunRise = Weather.getSunrise(currentLocation, now);
+            todaySunSet = Weather.getSunset(currentLocation, now);
+        }
         var nextSun = [null as Boolean, null as Integer, null as Integer]; // Var 1 is the next sun event (False for rise, True for set, null for not available), Var 2 is the time in seconds that the sun event occurs at.
         var nextSunEvent = null;
 
@@ -345,7 +370,7 @@ class WatchFaceView extends WatchUi.WatchFace {
                 if (now.value() > todaySunSet.value()){
                     //it is after sunset
                     var tomorrow = now.add(oneDay);
-                    nextSunEvent = Weather.getSunrise(currentLocation.position, tomorrow);
+                    nextSunEvent = Weather.getSunrise(currentLocation, tomorrow);
                     nextSun[0] = false;
                 }else{
                     //it is after sunrise and before sunset
@@ -358,7 +383,7 @@ class WatchFaceView extends WatchUi.WatchFace {
                 nextSun[0] = false;
             }
             if(nextSun[0] != null && nextSunEvent instanceof Moment){
-                nextSunEvent = Gregorian.localMoment(currentLocation.position, nextSunEvent);
+                nextSunEvent = Gregorian.localMoment(currentLocation, nextSunEvent);
                 if (nextSunEvent != null){
                     nextSunEvent = Gregorian.info(nextSunEvent, Time.FORMAT_SHORT);
                     nextSun[1] = nextSunEvent.hour;
