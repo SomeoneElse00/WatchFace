@@ -1,6 +1,6 @@
 # My Garmin Forerunner 955 Watch Face
 
-[to be added]
+I've wanted to build a watch face for my garmin watch ever since I got one so I could pack more data onto the watch face.
 
 ## Dependencies
 
