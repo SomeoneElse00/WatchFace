@@ -239,15 +239,16 @@ class WatchFaceView extends WatchUi.WatchFace {
         var dayInfo = Gregorian.info(now, Time.FORMAT_MEDIUM);
 
         // Get Heart Rate Info
-        var hrData = Toybox.ActivityMonitor.getHeartRateHistory(null,true).next().heartRate;
+        var hrData = Toybox.ActivityMonitor.getHeartRateHistory(null,true).next();
+        hrData = (hrData != null) ? hrData.heartRate : null;
 
         // Confirm position for Sunrise Calculation exists, or pull from memory
         var cachePosition = Storage.getValue("cachePosition");
-        if (currentLocation != null && cachePosition != null && currentLocation.position != null && (NEXT_CACHE == null || NEXT_CACHE < now.value())){ //if location info is available and a cache is due
+        if (currentLocation != null && currentLocation.position != null && (NEXT_CACHE == null || NEXT_CACHE < now.value())){ //if location info is available and a cache is due
             //prep location
             var degrees = currentLocation.position.toDegrees();
             var curPosition = degrees[0] + ", " + degrees[1];
-            if (!cachePosition.equals(curPosition)){
+            if (!curPosition.equals(cachePosition)){
                 Storage.setValue("cachePosition",curPosition);
             }
             NEXT_CACHE = now.value() + LOC_CACHE_INTERVAL;
@@ -735,7 +736,19 @@ class WatchFaceView extends WatchUi.WatchFace {
 
 
     function onPartialUpdate(dc as Dc){
-        dc.setColor(Application.Properties.getValue("TimeColor") as Number, Application.Properties.getValue("AccentTimeBGColor") as Number);
+        var CAN_BURN_IN = false;
+        var systemSettings = System.getDeviceSettings();
+        
+        if(systemSettings has :requiresBurnInProtection) {
+        	CAN_BURN_IN = systemSettings.requiresBurnInProtection;
+        }
+
+        if (CAN_BURN_IN){
+            dc.setColor(Application.Properties.getValue("TimeColor") as Number, Application.Properties.getValue("AccentTimeBGColor") as Number);
+        }else{
+            dc.setColor(Application.Properties.getValue("TimeColor") as Number, Application.Properties.getValue("BackgroundColor") as Number);
+        }
+        
         dc.setClip(WIDTH*0.835, HEIGHT*0.5, WIDTH*0.11, HEIGHT*0.11);
         dc.clear();
         //dc.drawRectangle(WIDTH*0.835, HEIGHT*0.5, WIDTH*0.11, HEIGHT*0.11);
@@ -751,14 +764,17 @@ class WatchFaceView extends WatchUi.WatchFace {
         dc.setClip(WIDTH*0.23, HEIGHT*0.655, WIDTH*0.25, HEIGHT*0.14);
         dc.clear();
         // ---------Update Heart Rate Info---------
-        var hrData = Toybox.ActivityMonitor.getHeartRateHistory(1,true).next().heartRate;
+        var hrData = Toybox.ActivityMonitor.getHeartRateHistory(null,true).next().heartRate;
         var fieldHR = View.findDrawableById("heartRate") as Text;
         fieldHR.setColor(Application.Properties.getValue("ForegroundColor") as Number);
-        if (hrData == null or hrData == ActivityMonitor.INVALID_HR_SAMPLE){
-            fieldHR.setText("--");
-        }else{
-            fieldHR.setText(hrData.format("%d"));
-        }
+
+        fieldHR.setText((hrData == null || hrData == ActivityMonitor.INVALID_HR_SAMPLE)?"--":hrData.format("%d"));
+
+        //if (hrData == null or hrData == ActivityMonitor.INVALID_HR_SAMPLE){
+        //    fieldHR.setText("--");
+        //}else{
+        //    fieldHR.setText(hrData.format("%d"));
+        //}
         fieldHR.draw(dc);
         dc.clearClip();
     }
