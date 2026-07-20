@@ -22,6 +22,8 @@ class WatchFaceView extends WatchUi.WatchFace {
     var ARC_LENGTH;
     var ARC_SIN;
     var ARC_COS;
+    var LOC_CACHE_INTERVAL = 600; //10 mins
+    var NEXT_CACHE;
 
     // ----- Time Constants -----
     var oneDay;
@@ -32,6 +34,9 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     function initialize() {
         WatchFace.initialize();
+        if (Storage.getValue("cachePosition") != null){
+            NEXT_CACHE = Time.now().value();
+        }
     }
 
     // Load your resources here
@@ -237,17 +242,20 @@ class WatchFaceView extends WatchUi.WatchFace {
         var hrData = Toybox.ActivityMonitor.getHeartRateHistory(null,true).next().heartRate;
 
         // Confirm position for Sunrise Calculation exists, or pull from memory
-        //using Toybox.Application.Storage;
-        // CANNOT STORE LOCATION.POSITION: STORE AS INDIVIDUAL NUMBERS, AND KEEP A BOOLEAN TO TRACK SETUP.
         var cachePosition = Storage.getValue("cachePosition");
-
-        if ((currentLocation == null || currentLocation.position == null) && cachePosition != null) {
-            currentLocation = cachePosition;
-        } else {
-            if ((cachePosition == null || currentLocation.position != cachePosition) && currentLocation.position != null) {
-                Storage.setValue("cachePosition", currentLocation.position);
+        if (currentLocation != null && cachePosition != null && currentLocation.position != null && (NEXT_CACHE == null || NEXT_CACHE < now.value())){ //if location info is available and a cache is due
+            //prep location
+            var degrees = currentLocation.position.toDegrees();
+            var curPosition = degrees[0] + ", " + degrees[1];
+            if (!cachePosition.equals(curPosition)){
+                Storage.setValue("cachePosition",curPosition);
             }
+            NEXT_CACHE = now.value() + LOC_CACHE_INTERVAL;
             currentLocation = currentLocation.position;
+        }else if (cachePosition != null){
+            currentLocation = Position.parse(cachePosition,Position.GEO_DEG);
+        }else{
+            currentLocation = null;
         }
 
 
