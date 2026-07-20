@@ -1,5 +1,7 @@
 # My Garmin Forerunner 955 Watch Face
 
+I've wanted to build a watch face for my garmin watch ever since I got one so I could pack more data onto the watch face.
+
 ## Dependencies
 
 - Garmin Connect IQ 8.4.0 or later
