@@ -30,30 +30,13 @@ I've wanted to build a watch face for my garmin watch ever since I got one so I 
 
 ## Dev List
 
-- [x] Add Fields
-  - [ ] [?????] Last Activity?
+- [ ] Add Fields
+  - [ ] When no notifications, show Phone battery life.
 - [ ] Allow changing settings
   - [ ] Configure the settings menu
-- [x] Add Icons for Status
-  - [x] Rearrange Layout for better placement
-  - [x] Bluetooth Disconnected
-  - [x] Alarm is Set
-  - [x] Do Not Disturb is On
-- [X] Add Icons for the Custom Fields
-  - [x] Heart Rate
-  - [x] Sun
-  - [x] Weather
-  - [x] Body Battery
-  - [x] ~~Recovery Time?~~ Added Progress Bar
-  - [x] Notifications Icon
 - [ ] Add Face Flairs
-  - [x] Color Highlight under Centre box
-  - [x] Lines to split all sections
-  - [x] ~~Custom Font for Current Time~~ <-- I'm happy with the font
-  - [x] Add end caps to progress bars
   - [ ] At night, make the top progress bar represent some status about the moon (i.e. phase, visibility, luminance)
   - [ ] Create Application Icon
-  - [x] Rearrange Fields as Necessary
   - [ ] Change weather behavior to update when moving from low to high power
   - [ ] Add Logic to choose between two hr gathering methods. Break HR gathering to seperate fn.
     - [ ] Activity.getActivityInfo().currentHeartRate
@@ -68,6 +51,7 @@ I've wanted to build a watch face for my garmin watch ever since I got one so I 
   - [x] HR
   - [ ] body battery
   - [ ] notifications
+  - [ ] Fix update failures
 
 ## References
 
