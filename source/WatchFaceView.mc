@@ -22,6 +22,8 @@ class WatchFaceView extends WatchUi.WatchFace {
     var ARC_LENGTH;
     var ARC_SIN;
     var ARC_COS;
+    var LOC_CACHE_INTERVAL = 600; //10 mins
+    var NEXT_CACHE;
 
     // ----- Time Constants -----
     var oneDay;
@@ -32,6 +34,9 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     function initialize() {
         WatchFace.initialize();
+        if (Storage.getValue("cachePosition") != null){
+            NEXT_CACHE = Time.now().value();
+        }
     }
 
     // Load your resources here
@@ -53,8 +58,11 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     function getWeatherBitmap (condition as Weather.Condition or Null, isWeatherDay as Boolean) as WatchUi.BitmapResource {
         //var wr = Weather.getCurrentConditions().precipitationChance;
+        //Referenced Conditions mapping from https://github.com/victorpaul/garmin-watchFace/blob/master/source/utils/weather.mc, line 57-88 on revision 3b8002. Used for cleanup and consistency.
         switch (condition) {
             case Weather.CONDITION_CLEAR:
+            case Weather.CONDITION_MOSTLY_CLEAR:
+            case Weather.CONDITION_FAIR:
                 if (isWeatherDay){
                     return WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);
                 }else{
@@ -62,28 +70,43 @@ class WatchFaceView extends WatchUi.WatchFace {
                 }
 
             case Weather.CONDITION_PARTLY_CLOUDY:
+            case Weather.CONDITION_PARTLY_CLEAR:
+            case Weather.CONDITION_THIN_CLOUDS:
                 if (isWeatherDay){
                     return WatchUi.loadResource(Rez.Drawables.bitmapWeatherPartlyDay);
                 }else{
                     return WatchUi.loadResource(Rez.Drawables.bitmapWeatherPartlyNight);
                 }
 
+            case Weather.CONDITION_CLOUDY:
             case Weather.CONDITION_MOSTLY_CLOUDY:
                 return WatchUi.loadResource(Rez.Drawables.bitmapWeatherCloud);
 
             case Weather.CONDITION_RAIN:
+            case Weather.CONDITION_SCATTERED_SHOWERS:
+            case Weather.CONDITION_CLOUDY_CHANCE_OF_RAIN:
+            case Weather.CONDITION_CHANCE_OF_SHOWERS:
+            case Weather.CONDITION_SHOWERS:
+            case Weather.CONDITION_UNKNOWN_PRECIPITATION:
                 return WatchUi.loadResource(Rez.Drawables.bitmapWeatherRain);
 
             case Weather.CONDITION_SNOW:
+            case Weather.CONDITION_LIGHT_SNOW:
+            case Weather.CONDITION_HEAVY_SNOW:
                 return WatchUi.loadResource(Rez.Drawables.bitmapWeatherSnow);
 
             case Weather.CONDITION_WINDY:
                 return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWindy);
 
             case Weather.CONDITION_THUNDERSTORMS:
+            case Weather.CONDITION_SCATTERED_THUNDERSTORMS:
+            case Weather.CONDITION_CHANCE_OF_THUNDERSTORMS:
                 return WatchUi.loadResource(Rez.Drawables.bitmapWeatherStorm);
                 
             case Weather.CONDITION_WINTRY_MIX:
+            case Weather.CONDITION_CHANCE_OF_SNOW:
+            case Weather.CONDITION_CLOUDY_CHANCE_OF_SNOW:
+            case Weather.CONDITION_FLURRIES:
                 if (isWeatherDay) {
                     return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWintryDay);
                 }else{
@@ -98,168 +121,47 @@ class WatchFaceView extends WatchUi.WatchFace {
                 }
 
             case Weather.CONDITION_HAZY:
+            case Weather.CONDITION_SMOKE:
+            case Weather.CONDITION_HAZE:
+            case Weather.CONDITION_DUST:
                 return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHaze);
 
-            case Weather.CONDITION_HAIL:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHailExtreme);
-
-            case Weather.CONDITION_SCATTERED_SHOWERS:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherRain);
-
-            case Weather.CONDITION_SCATTERED_THUNDERSTORMS:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherStorm);
-
-            case Weather.CONDITION_UNKNOWN_PRECIPITATION:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherRain);
-
             case Weather.CONDITION_LIGHT_RAIN:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherLightRain);
-
-            case Weather.CONDITION_HEAVY_RAIN:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHeavyRain);
-
-            case Weather.CONDITION_LIGHT_SNOW:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherSnow);
-
-            case Weather.CONDITION_HEAVY_SNOW:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherSnow);
-
-            case Weather.CONDITION_LIGHT_RAIN_SNOW:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHail);
-
-            case Weather.CONDITION_HEAVY_RAIN_SNOW:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHailExtreme);
-
-            case Weather.CONDITION_CLOUDY:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherCloud);
-
-            case Weather.CONDITION_RAIN_SNOW:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHail);
-
-            case Weather.CONDITION_PARTLY_CLEAR:
-                if (isWeatherDay){
-                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherPartlyDay);
-                }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherPartlyNight);
-                }
-
-            case Weather.CONDITION_MOSTLY_CLEAR:
-                if (isWeatherDay){
-                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);
-                }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherClearNight);
-                }
-
             case Weather.CONDITION_LIGHT_SHOWERS:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherLightRain);
-
-            case Weather.CONDITION_SHOWERS:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherRain);
-
-            case Weather.CONDITION_HEAVY_SHOWERS:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHeavyRain);
-
-            case Weather.CONDITION_CHANCE_OF_SHOWERS:
-                /*if (Weather.getCurrentConditions().precipitationChance > 40){
-                    return getWeatherBitmap (Weather.condition, isWeatherDay); 
-                }*/
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherRain);//unassigned
-
-            case Weather.CONDITION_CHANCE_OF_THUNDERSTORMS:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherStorm);//unassigned
-
             case Weather.CONDITION_MIST:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherLightRain);
-
-            case Weather.CONDITION_DUST:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWindy);
-
             case Weather.CONDITION_DRIZZLE:
                 return WatchUi.loadResource(Rez.Drawables.bitmapWeatherLightRain);
 
-            case Weather.CONDITION_TORNADO:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);
+            case Weather.CONDITION_HEAVY_RAIN:
+            case Weather.CONDITION_HEAVY_SHOWERS:
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHeavyRain);
 
-            case Weather.CONDITION_SMOKE:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHaze);
-
-            case Weather.CONDITION_ICE:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherIce);
-
-            case Weather.CONDITION_SAND:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWindSock);
-
-            case Weather.CONDITION_SQUALL:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);
-
-            case Weather.CONDITION_SANDSTORM:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);
-
-            case Weather.CONDITION_VOLCANIC_ASH:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWindSock);
-
-            case Weather.CONDITION_HAZE:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHaze);
-
-            case Weather.CONDITION_FAIR:
-                if (isWeatherDay){
-                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherSunny);
-                }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherClearNight);
-                }
-
-            case Weather.CONDITION_HURRICANE:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);
-
-            case Weather.CONDITION_TROPICAL_STORM:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);
-
-            case Weather.CONDITION_CHANCE_OF_SNOW:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHail);
-
+            case Weather.CONDITION_LIGHT_RAIN_SNOW:
+            case Weather.CONDITION_RAIN_SNOW:
+            case Weather.CONDITION_CLOUDY_CHANCE_OF_RAIN_SNOW:
             case Weather.CONDITION_CHANCE_OF_RAIN_SNOW:
                 return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHail);
 
-            case Weather.CONDITION_CLOUDY_CHANCE_OF_RAIN:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherRain);
+            case Weather.CONDITION_TORNADO:
+            case Weather.CONDITION_SQUALL:
+            case Weather.CONDITION_SANDSTORM:
+            case Weather.CONDITION_HURRICANE:
+            case Weather.CONDITION_TROPICAL_STORM:
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherTornado);
 
-            case Weather.CONDITION_CLOUDY_CHANCE_OF_SNOW:
-                if (isWeatherDay) {
-                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWintryDay);
-                }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWintryNight);
-                }
+            case Weather.CONDITION_SAND:
+            case Weather.CONDITION_VOLCANIC_ASH:
+                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWindSock);
 
-            case Weather.CONDITION_CLOUDY_CHANCE_OF_RAIN_SNOW:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHail);
-                /*if (isWeatherDay) {
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
-                }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);//unassigned
-                }*/
-
-            case Weather.CONDITION_FLURRIES:
-                if (isWeatherDay) {
-                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWintryDay);
-                }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherWintryNight);
-                }
-
+            case Weather.CONDITION_ICE:
             case Weather.CONDITION_FREEZING_RAIN:
                 return WatchUi.loadResource(Rez.Drawables.bitmapWeatherIce);
 
             case Weather.CONDITION_SLEET:
-                return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHailExtreme);
-
             case Weather.CONDITION_ICE_SNOW:
+            case Weather.CONDITION_HEAVY_RAIN_SNOW:
+            case Weather.CONDITION_HAIL:
                 return WatchUi.loadResource(Rez.Drawables.bitmapWeatherHailExtreme);
-
-            case Weather.CONDITION_THIN_CLOUDS:
-                if (isWeatherDay){
-                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherPartlyDay);
-                }else{
-                    return WatchUi.loadResource(Rez.Drawables.bitmapWeatherPartlyNight);
-                }
 
             default:
                 return WatchUi.loadResource(Rez.Drawables.bitmapQuestion);
@@ -283,8 +185,14 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         // Get relative sun
         var isDay = false;
-        var rise = Weather.getSunrise(Position.getInfo().position, Time.now());
-        var fall = Weather.getSunset(Position.getInfo().position, Time.now());
+        var currentLoc = Position.getInfo();
+        var rise = null;
+        var fall = null;
+        if (currentLoc != null && currentLoc.position != null){
+            rise = Weather.getSunrise(currentLoc.position, Time.now());
+            fall = Weather.getSunset(currentLoc.position, Time.now());
+        }
+        
         if (rise != null && fall != null) {
             if (rise.value() < Time.now().value() && fall.value() > Time.now().value()) {
                 isDay = true;
@@ -331,11 +239,34 @@ class WatchFaceView extends WatchUi.WatchFace {
         var dayInfo = Gregorian.info(now, Time.FORMAT_MEDIUM);
 
         // Get Heart Rate Info
-        var hrData = Toybox.ActivityMonitor.getHeartRateHistory(1,true).next().heartRate;
+        var hrData = Toybox.ActivityMonitor.getHeartRateHistory(null,true).next();
+        hrData = (hrData != null) ? hrData.heartRate : null;
+
+        // Confirm position for Sunrise Calculation exists, or pull from memory
+        var cachePosition = Storage.getValue("cachePosition");
+        if (currentLocation != null && currentLocation.position != null && (NEXT_CACHE == null || NEXT_CACHE < now.value())){ //if location info is available and a cache is due
+            //prep location
+            var degrees = currentLocation.position.toDegrees();
+            var curPosition = degrees[0] + ", " + degrees[1];
+            if (!curPosition.equals(cachePosition)){
+                Storage.setValue("cachePosition",curPosition);
+            }
+            NEXT_CACHE = now.value() + LOC_CACHE_INTERVAL;
+            currentLocation = currentLocation.position;
+        }else if (cachePosition != null){
+            currentLocation = Position.parse(cachePosition,Position.GEO_DEG);
+        }else{
+            currentLocation = null;
+        }
+
 
         // Get Sun Status (Sunrise or Sundown, whichever is next)
-        var todaySunRise = Weather.getSunrise(currentLocation.position, now);
-        var todaySunSet = Weather.getSunset(currentLocation.position, now);
+        var todaySunRise = null;
+        var todaySunSet = null;
+        if (currentLocation != null) {
+            todaySunRise = Weather.getSunrise(currentLocation, now);
+            todaySunSet = Weather.getSunset(currentLocation, now);
+        }
         var nextSun = [null as Boolean, null as Integer, null as Integer]; // Var 1 is the next sun event (False for rise, True for set, null for not available), Var 2 is the time in seconds that the sun event occurs at.
         var nextSunEvent = null;
 
@@ -345,7 +276,7 @@ class WatchFaceView extends WatchUi.WatchFace {
                 if (now.value() > todaySunSet.value()){
                     //it is after sunset
                     var tomorrow = now.add(oneDay);
-                    nextSunEvent = Weather.getSunrise(currentLocation.position, tomorrow);
+                    nextSunEvent = Weather.getSunrise(currentLocation, tomorrow);
                     nextSun[0] = false;
                 }else{
                     //it is after sunrise and before sunset
@@ -358,7 +289,7 @@ class WatchFaceView extends WatchUi.WatchFace {
                 nextSun[0] = false;
             }
             if(nextSun[0] != null && nextSunEvent instanceof Moment){
-                nextSunEvent = Gregorian.localMoment(currentLocation.position, nextSunEvent);
+                nextSunEvent = Gregorian.localMoment(currentLocation, nextSunEvent);
                 if (nextSunEvent != null){
                     nextSunEvent = Gregorian.info(nextSunEvent, Time.FORMAT_SHORT);
                     nextSun[1] = nextSunEvent.hour;
@@ -804,6 +735,51 @@ class WatchFaceView extends WatchUi.WatchFace {
     }
 
 
+    function onPartialUpdate(dc as Dc){
+        var CAN_BURN_IN = false;
+        var systemSettings = System.getDeviceSettings();
+        
+        if(systemSettings has :requiresBurnInProtection) {
+        	CAN_BURN_IN = systemSettings.requiresBurnInProtection;
+        }
+
+        if (CAN_BURN_IN){
+            dc.setColor(Application.Properties.getValue("TimeColor") as Number, Application.Properties.getValue("AccentTimeBGColor") as Number);
+        }else{
+            dc.setColor(Application.Properties.getValue("TimeColor") as Number, Application.Properties.getValue("BackgroundColor") as Number);
+        }
+        
+        dc.setClip(WIDTH*0.835, HEIGHT*0.5, WIDTH*0.11, HEIGHT*0.11);
+        dc.clear();
+        //dc.drawRectangle(WIDTH*0.835, HEIGHT*0.5, WIDTH*0.11, HEIGHT*0.11);
+        // ---------Update Seconds---------
+        var fieldSecondsDigit = View.findDrawableById("seconds") as Text;
+        fieldSecondsDigit.setColor(Application.Properties.getValue("TimeColor") as Number);
+        fieldSecondsDigit.setText(System.getClockTime().sec.format("%02d"));
+        fieldSecondsDigit.draw(dc);
+        dc.clearClip();
+
+
+        dc.setColor(Application.Properties.getValue("ForegroundColor") as Number, Application.Properties.getValue("BackgroundColor") as Number);
+        dc.setClip(WIDTH*0.23, HEIGHT*0.655, WIDTH*0.25, HEIGHT*0.14);
+        dc.clear();
+        // ---------Update Heart Rate Info---------
+        var hrData = Toybox.ActivityMonitor.getHeartRateHistory(null,true).next().heartRate;
+        var fieldHR = View.findDrawableById("heartRate") as Text;
+        fieldHR.setColor(Application.Properties.getValue("ForegroundColor") as Number);
+
+        fieldHR.setText((hrData == null || hrData == ActivityMonitor.INVALID_HR_SAMPLE)?"--":hrData.format("%d"));
+
+        //if (hrData == null or hrData == ActivityMonitor.INVALID_HR_SAMPLE){
+        //    fieldHR.setText("--");
+        //}else{
+        //    fieldHR.setText(hrData.format("%d"));
+        //}
+        fieldHR.draw(dc);
+        dc.clearClip();
+    }
+
+    
     // DEV
     function drawReferenceLines(dc as Dc) as Void {
         var WIDTH = dc.getWidth();
@@ -893,32 +869,4 @@ class WatchFaceView extends WatchUi.WatchFace {
         );
     }
 
-    function onPartialUpdate(dc as Dc){
-        dc.setColor(Application.Properties.getValue("TimeColor") as Number, Application.Properties.getValue("AccentTimeBGColor") as Number);
-        dc.setClip(WIDTH*0.835, HEIGHT*0.5, WIDTH*0.11, HEIGHT*0.11);
-        dc.clear();
-        //dc.drawRectangle(WIDTH*0.835, HEIGHT*0.5, WIDTH*0.11, HEIGHT*0.11);
-        // ---------Update Seconds---------
-        var fieldSecondsDigit = View.findDrawableById("seconds") as Text;
-        fieldSecondsDigit.setColor(Application.Properties.getValue("TimeColor") as Number);
-        fieldSecondsDigit.setText(System.getClockTime().sec.format("%02d"));
-        fieldSecondsDigit.draw(dc);
-        dc.clearClip();
-
-
-        dc.setColor(Application.Properties.getValue("ForegroundColor") as Number, Application.Properties.getValue("BackgroundColor") as Number);
-        dc.setClip(WIDTH*0.23, HEIGHT*0.655, WIDTH*0.25, HEIGHT*0.15);
-        dc.clear();
-        // ---------Update Heart Rate Info---------
-        var hrData = Toybox.ActivityMonitor.getHeartRateHistory(1,true).next().heartRate;
-        var fieldHR = View.findDrawableById("heartRate") as Text;
-        fieldHR.setColor(Application.Properties.getValue("ForegroundColor") as Number);
-        if (hrData == null or hrData == ActivityMonitor.INVALID_HR_SAMPLE){
-            fieldHR.setText("--");
-        }else{
-            fieldHR.setText(hrData.format("%d"));
-        }
-        fieldHR.draw(dc);
-        dc.clearClip();
-    }
 }
